@@ -11,6 +11,9 @@ var GameManager =
     __gameDrawLoop : null,
     __gamePhysicsLoop : null,
 
+    CANVAS_WIDTH : $("#canvas").width(),
+    CANVAS_HEIGHT : $("#canvas").height(),
+
     Start : function(updateInterval, drawInterval, physicsInterval)
     {
         //Set up the amount of time that passes in an update
@@ -25,9 +28,31 @@ var GameManager =
         //NOTE: I wrap the update function calls in functions so the 'this' variable
         //passed to them is of the object and not the global scope.
         var gameManager = this;
-        this.__gameUpdateLoop = setInterval(function(){gameManager.__UpdateGameObject()}, updateInterval);
-        this.__gameDrawLoop = setInterval(function(){gameManager.__DrawGameObject()}, drawInterval);
-        //this.__gamePhysicsLoop = setInterval(function(){gameManager.__UpdateCollidable()}, physicsInterval);
+        var canvas2D = $("#canvas")[0].getContext("2d");
+        this.__gameUpdateLoop = setInterval(function(){gameManager.__Update()}, updateInterval);
+        this.__gameDrawLoop = setInterval(function(){gameManager.__Draw(canvas2D)}, drawInterval);
+        //this.__gamePhysicsLoop = setInterval(function(){gameManager.__PhysicsUpdate()}, physicsInterval);
+    },
+
+    __Update : function()
+    {
+        this.__UpdateGameObject();
+    },
+
+    __Draw : function(canvas2D)
+    {
+        //Draw Canvas border
+		canvas2D.fillStyle = "white";
+		canvas2D.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+		canvas2D.strokeStyle = "black";
+		canvas2D.strokeRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+
+        this.__DrawGameObject(canvas2D);
+    },
+
+    __PhysicsUpdate : function()
+    {
+        this.__UpdateCollidable();
     },
 
     AddGameObject : function(gameObject)
@@ -69,11 +94,11 @@ var GameManager =
             this.__gameObjects[i].Update(this.__gameTime);
         }
     },
-    __DrawGameObject : function()
+    __DrawGameObject : function(canvas2D)
     {
         for(i = 0; i < this.__gameObjects.length; i++)
         {
-            this.__gameObjects[i].Draw(this.__gameTime);
+            this.__gameObjects[i].Draw(canvas2D);
         }
     },
 };

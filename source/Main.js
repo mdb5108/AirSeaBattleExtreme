@@ -12,7 +12,7 @@ $(document).ready(function(){
         {
             console.log("Update Called! With: " + gameTime);
         },
-        Draw : function()
+        Draw : function(canvas2D)
         {
             console.log("Draw Called!");
         }
