@@ -1,3 +1,20 @@
+// Inheritance test used as example
+//    function TestParent(stringHello)
+//{
+//    this.string = stringHello;
+//}
+//
+//    function Test(test_height)
+//{
+//    TestParent.call(this, "Hello World");
+//    //this.setPrototypeOf = new TestParent("Hello World");
+//    this.height = test_height;
+//}
+//Test.prototype = Object.create(TestParent.prototype);
+//Test.prototype.constructor = Test;
+//var test = new Test(10);
+//alert(test.string);
+	
 //Obtained from http://thecodeplayer.com/walkthrough/html5-game-tutorial-make-a-snake-game-using-html5-canvas-jquery
 $(document).ready(function(){
 	//Canvas stuff
@@ -14,7 +31,7 @@ $(document).ready(function(){
 	
 	//Lets create the snake now
 	var snake_array; //an array of cells to make up the snake
-	
+
 	function init()
 	{
 		d = "right"; //default direction
@@ -22,7 +39,7 @@ $(document).ready(function(){
 		create_food(); //Now we can see the food particle
 		//finally lets display the score
 		score = 0;
-		
+
 		//Lets move the snake now using a timer which will trigger the paint function
 		//every 60ms
 		if(typeof game_loop != "undefined") clearInterval(game_loop);
