@@ -25,5 +25,6 @@ $(document).ready(function(){
         }
     };
     GameManager.AddGameObject(gameObject);
-    setTimeout(function(){GameManager.RemoveGameObject(gameObject);}, 100);
-})
+    setTimeout(function(){GameManager.RemoveGameObject(gameObject);}, 100);*/
+    //setTimeout(function(){GameManager.RemoveGameObject(GameObject);}, 100);
+});
