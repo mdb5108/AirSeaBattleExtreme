@@ -6,37 +6,70 @@ Player.controls = {
 	space: false
 };
 
-var gameObj = new GameObject("turret.png", this.x, this.y, this.xScl, this.yScl);
+var bulletCvs = document.createElement("canvas");
 
-Player.prototype = gameObj;
-
-function Player(health, x, y, xScl, yScl)
+function Player(imgPath, canvas, health, x, y, xScl, yScl)
 {
+	GameObject.call(this, imgPath, canvas, x, y, xScl, yScl);
 	this.health = health;
-	this.x = x;
-	this.y = y;
-	this.xScl = xScl;
-	this.yScl = yScl;
+	this.usedAmmo = [];
 };
+
+Player.prototype = Object.create(GameObject.prototype);
 
 Player.prototype.constructor = Player;
 
-var bullet = new Bullet("tempshot.png", this.x, this.y, this.xScl, this.yScl);
+/*Player.prototype.MoveBarrel = function(direction)
+{
+	if(direction == "vertical")
+	{
+		direction = "stationary";
+		this.imgPath = "turret_b.png";
+		this.Repaint();
+	}
+	else
+	{
+		direction = "vertical";
+		this.imgPath = "turret_a.png";
+		this.Repaint();
+	}
+}*/
 
 Player.prototype.Update = function()
 {
+	var angle = 0;
+	var bullet = new Bullet("tempshot.png", this.canvas, 5, 98, 20, 8, 50);
 	if(Player.controls.space)
 	{
-		//bullet.Draw(document.getElementById("canvas"));
+		//bullet.SetPosition(this.x, this.y);
+		GameManager.AddGameObject(bullet);
+		//this.usedAmmo.push(bullet);
 	}
-//		if(Player.controls.up)
-//			this.y -= 1;
+
+/*	if(Player.controls.up)
+	{
+		this.MoveBarrel("vertical");
+		var bullet = this.ammo.pop();
+		bullet.SetPosition(this.x, this.y);
+		this.ammo[this.ammo.length] = bullet;
+	}
+	if(Player.controls.down)
+	{
+		this.MoveBarrel("stationary");
+		var bullet = this.ammo.pop();
+		bullet.SetPosition(this.x, this.y);
+		this.ammo[this.ammo.length] = bullet;
+	}
+*/	if(Player.controls.left)
+	{
+		this.Rotate(-5);
+		bullet.Rotate(-5);
+	}		
 	if(Player.controls.right)
-		this.x += 1;
-//		if(Player.controls.down)
-//			this.y += 1;
-	if(Player.controls.left)
-		this.x -= 1;
+	{
+		this.Rotate(5);
+		bullet.Rotate(-5);
+	}
 };
 
 window.addEventListener("keydown", function(e){

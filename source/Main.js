@@ -5,8 +5,17 @@ $(document).ready(function(){
 
     GameManager.Start(updateInterval, drawInterval, physicsInterval);
 
-    var background = new GameObject("background-new vision.png", 0, 0, $("#canvas").width(), $("#canvas").height());
-    var turret1 = new Player("turret.png", 500, $("#canvas").height() * 0.74, 200, 200);
+    var background = new GameObject("background-new vision.png", $("#canvas")[0], 0, 0, $("#canvas").width(), $("#canvas").height());
+
+    var turretCvs = document.createElement("canvas");
+    turretCvs.id = "turretCvs";
+    turretCvs.width = 300;
+    turretCvs.height = 300;
+    turretCvs.display = 'block';
+
+    var turret1 = new Player("turret_a.png", turretCvs, 500, $("#turretCvs").width()/2, $("#turretCvs").height()/2, 200, 200);
+
+    document.getElementById("game").appendChild(turretCvs);
 
     GameManager.AddGameObject(background);
     GameManager.AddGameObject(turret1);
@@ -23,7 +32,8 @@ $(document).ready(function(){
         {
             console.log("Draw Called!");
         }
-    };
-    GameManager.AddGameObject(gameObject);
-    setTimeout(function(){GameManager.RemoveGameObject(gameObject);}, 100);
+        GameManager.AddGameObject(gameObject);
+    };*/
+    
+    //setTimeout(function(){GameManager.RemoveGameObject(gameObject);}, 100);
 })

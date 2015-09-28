@@ -1,0 +1,10 @@
+#turretCvs
+{
+	display: block;
+	margin-left: 60%;
+	margin-top: -15%;
+}
+#bulletCvs
+{
+	position: absolute;
+}
