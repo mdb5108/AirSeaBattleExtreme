@@ -1,32 +1,113 @@
-Player.controlsPressed = {
-	left: false,
-    redoLeft: false,
-	up: false,
-    redoUp: false,
-	right: false,
-    redoRight: false,
-	down: false,
-    redoDown: false,
-	space: false,
-    redoSpace: false,
-    clear: function()
+Player.controls = {
+    __LEFT: [false, false],
+    __LEFT_REDO: [true, true],
+    __RIGHT: [false, false],
+    __RIGHT_REDO: [true, true],
+    __FIRE: [false, false],
+
+    __setLeft: function(number, value)
     {
-        this.left = false;
-        this.up = false;
-        this.right = false;
-        this.down = false;
-        this.space = false;
+        if(this.__LEFT_REDO[number])
+        {
+            this.__LEFT_REDO[number] = false;
+            this.__LEFT[number] = true;
+        }
+    },
+    __setRight: function(number, value)
+    {
+        if(this.__RIGHT_REDO[number])
+        {
+            this.__RIGHT_REDO[number] = false;
+            this.__RIGHT[number] = true;
+        }
+    },
+
+    __setLeftUnPressed: function(number)
+    {
+        this.__LEFT_REDO[number] = true;
+    },
+    __setRightUnPressed: function(number)
+    {
+        this.__RIGHT_REDO[number] = true;
+    },
+
+    getLeft: function(number)
+    {
+        return this.__LEFT[number];
+    },
+    getRight: function(number)
+    {
+        return this.__RIGHT[number];
+    },
+    getFire: function(number)
+    {
+        return this.__FIRE[number];
+    },
+
+    handleKeyDown: function(e)
+    {
+        e.preventDefault();
+        switch(e.keyCode)
+        {
+            //Player 1
+            case 96: //numpad 0
+                this.__FIRE[0] = true;
+                break;
+            case 37: // left arrow
+                this.__setLeft(0, true);
+                break;
+            case 39: // right arrow
+                this.__setRight(0, true);
+                break;
+
+            //Player 2
+            case 32: // spacebar
+                this.__FIRE[1] = true;
+                break;
+            case 65: // a
+                this.__setLeft(1, true);
+                break;
+            case 68: // d
+                this.__setRight(1, true);
+                break;
+        }
+    },
+    handleKeyUp: function(e)
+    {
+        e.preventDefault();
+        switch(e.keyCode)
+        {
+            //Player 1
+            case 96: //numpad 0
+                this.__FIRE[0] = false;
+                break;
+            case 37: // left arrow
+                this.__setLeftUnPressed(0);
+                break;
+            case 39: // right arrow
+                this.__setRightUnPressed(0);
+                break;
+
+            //Player 2
+            case 32: // spacebar
+                this.__FIRE[1] = false;
+                break;
+            case 65: // a
+                this.__setLeftUnPressed(1);
+                break;
+            case 68: // d
+                this.__setRightUnPressed(1);
+                break;
+        }
+    },
+    UpdateEnd: function(number)
+    {
+        this.__LEFT[number] = false;
+        this.__RIGHT[number] = false;
     }
 };
-Player.controls = {
-	left: false,
-	up: false,
-	right: false,
-	down: false,
-	space: false
-};
 
-function Player(health, x, y)
+function Player(playerNum, health, x, y)
 {
     this.BARREL_ROTATE_MAX = Math.PI/4;
     this.BARREL_ROTATE_MIN = -Math.PI/4;
@@ -43,6 +124,8 @@ function Player(health, x, y)
     this.canFire = true;
 
     this.PLAYER_ROTATE_SPEED = Math.PI;
+
+    this.playerNum = playerNum;
 
 	GameObject.call(this, "turret_b.png", x, y, 105, 150);
     this.angle = 0;
@@ -70,7 +153,7 @@ Player.prototype.Update = function(gameTime)
         }
     }
 
-	if(Player.controls.space && this.canFire)
+	if(Player.controls.getFire(this.playerNum) && this.canFire)
 	{
         var facing = this.GetFacing();
         var startPosition = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET_TO_BASE+this.BARREL_OFFSET_TO_TIP, facing));
@@ -79,7 +162,7 @@ Player.prototype.Update = function(gameTime)
         this.canFire = false;
 	}
 
-  	if(Player.controlsPressed.left)
+  	if(Player.controls.getLeft(this.playerNum))
 	{
         this.barrelRotation--;
         if(!(this.barrelRotation >= 0 && this.barrelRotation < this.BARREL_ROTATIONS.length))
@@ -87,7 +170,7 @@ Player.prototype.Update = function(gameTime)
             this.barrelRotation++;
         }
 	}		
-	if(Player.controlsPressed.right)
+	if(Player.controls.getRight(this.playerNum))
 	{
         this.barrelRotation++;
         if(!(this.barrelRotation >= 0 && this.barrelRotation < this.BARREL_ROTATIONS.length))
@@ -97,7 +180,7 @@ Player.prototype.Update = function(gameTime)
 	}
     this.barrel.angle = this.BARREL_ROTATIONS[this.barrelRotation];
 
-    Player.controlsPressed.clear();
+    Player.controls.UpdateEnd(this.playerNum);
 };
 
 Player.prototype.GetFacing = function()
@@ -106,75 +189,9 @@ Player.prototype.GetFacing = function()
 };
 
 window.addEventListener("keydown", function(e){
-	e.preventDefault();
-	switch(e.keyCode)
-	{
-		case 32: // spacebar
-            Player.controls.space = true;
-            if(Player.controlsPressed.redoSpace)
-            {
-                Player.controlsPressed.redoSpace = false;
-                Player.controlsPressed.space = true;
-            }
-			break;
-		case 37: // left arrow
-			Player.controls.left = true;
-            if(Player.controlsPressed.redoLeft)
-            {
-                Player.controlsPressed.redoLeft = false;
-                Player.controlsPressed.left = true;
-            }
-			break;
-		case 38: // up arrow
-			Player.controls.up = true;
-            if(Player.controlsPressed.redoUp)
-            {
-                Player.controlsPressed.redoUp = false;
-                Player.controlsPressed.up = true;
-            }
-			break;
-		case 39: // right arrow
-			Player.controls.right = true;
-            if(Player.controlsPressed.redoRight)
-            {
-                Player.controlsPressed.redoRight = false;
-                Player.controlsPressed.right = true;
-            }
-			break;
-		case 40: // down arrow
-			Player.controls.down = true;
-            if(Player.controlsPressed.redoDown)
-            {
-                Player.controlsPressed.redoDown = false;
-                Player.controlsPressed.down = true;
-            }
-			break;
-	}
+    Player.controls.handleKeyDown(e);
 }, false);
 
 window.addEventListener("keyup", function(e){
-	e.preventDefault();
-	switch(e.keyCode)
-	{
-		case 32:
-			Player.controls.space = false;
-            Player.controlsPressed.redoSpace = true;
-			break;
-		case 37: // left arrow
-			Player.controls.left = false;
-            Player.controlsPressed.redoLeft = true;
-			break;
-		case 38: // up arrow
-			Player.controls.up = false;
-            Player.controlsPressed.redoUp = true;
-			break;
-		case 39: // right arrow
-			Player.controls.right = false;
-            Player.controlsPressed.redoRight = true;
-			break;
-		case 40: // down arrow
-			Player.controls.down = false;
-            Player.controlsPressed.redoDown = true;
-			break;		
-	}
+    Player.controls.handleKeyUp(e);
 }, false);
