@@ -30,3 +30,14 @@ function Rect(left, top, right, bottom)
             && (this.top <= p.y && p.y <= this.bottom);
     }
 }
+
+function VectorMultiply(scalar, vector)
+{
+    return {x:scalar*vector.x, y:scalar*vector.y};
+}
+
+function VectorAdd(vector1, vector2)
+{
+    return {x:vector1.x+vector2.x, y:vector1.y+vector2.y};
+}
+
