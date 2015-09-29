@@ -29,3 +29,12 @@ Bullet.prototype.Update = function(gameTime)
         this.Destroy();
     }
 };
+
+Bullet.prototype.OnCollision = function(collider)
+{
+    Collidable.prototype.OnCollision(collider);
+    if(collider.tag != "Player1" && collider.tag != "Player2" && collider.tag != "Bullet")
+    {
+        this.Destroy();
+    }
+};
