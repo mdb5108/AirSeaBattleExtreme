@@ -7,7 +7,7 @@ $(document).ready(function(){
 
     var background = new GameObject("background-new vision.png", $("#canvas").width()/2, $("#canvas").height()/2, $("#canvas").width(), $("#canvas").height());
 
-    var turret1 = new Player(500, 200, 200, 200, 200);
+    var turret1 = new Player(500, 800, 535);
 
     //Example/test code that shows how to add game objects and remove them from the game
     //manager
