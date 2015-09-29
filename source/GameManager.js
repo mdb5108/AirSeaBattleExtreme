@@ -2,7 +2,7 @@
 //(Put in the global scope so it can be referenced everywhere)
 var GameManager = 
 {
-    __gameTime : null,
+    __gameTimeMilli : null,
 
     __gameObjects : [],
     __collidables : [],
@@ -22,7 +22,7 @@ var GameManager =
     Start : function(updateInterval, drawInterval, physicsInterval)
     {
         //Set up the amount of time that passes in an update
-        this.__gameTime = updateInterval;
+        this.__gameTimeMilli = updateInterval;
 
         //Stop loops if they are already going
         if(typeof this.__gameUpdateLoop != "undefined") clearInterval(this.__gameUpdateLoop);
@@ -141,7 +141,7 @@ var GameManager =
     {
         for(var i = 0; i < this.__gameObjects.length; i++)
         {
-            this.__gameObjects[i].Update(this.__gameTime);
+            this.__gameObjects[i].Update(this.__gameTimeMilli*.001);
         }
     },
     __DrawGameObject : function(canvas2D)
