@@ -10,6 +10,12 @@ $(document).ready(function(){
     var turret1 = new Player(0, 500, 800, 535);
     var turret2 = new Player(1, 500, 200, 535);
 
+    setInterval(function()
+        {
+            new Enemy(100+Math.random()*200);
+        },
+        2000);
+
     //Example/test code that shows how to add game objects and remove them from the game
     //manager
 /*    var gameObject = {
