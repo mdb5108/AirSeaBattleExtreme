@@ -115,7 +115,7 @@ function Player(playerNum, health, x, y)
 
     this.BARREL_OFFSET_TO_BASE = 25;
     this.BARREL_OFFSET_TO_TIP = 70;
-    this.BULLET_SPEED = 300;
+    this.BULLET_SPEED = 500;
     this.BULLET_FIRE_DELAY = 1;
 
     this.barrelRotation = 2;
