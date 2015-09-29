@@ -6,70 +6,49 @@ Player.controls = {
 	space: false
 };
 
-var bulletCvs = document.createElement("canvas");
-
-function Player(imgPath, canvas, health, x, y, xScl, yScl)
+function Player(health, x, y)
 {
-	GameObject.call(this, imgPath, canvas, x, y, xScl, yScl);
+    this.BARREL_OFFSET = 25;
+    this.BULLET_SPEED = 300;
+
+    this.PLAYER_ROTATE_SPEED = Math.PI;
+
+	GameObject.call(this, "turret_b.png", x, y, 105, 150);
+    this.angle = 0;
 	this.health = health;
-	this.usedAmmo = [];
+
+    this.barrel = new GameObject("turret_a.png", x, y+this.BARREL_OFFSET, 105, 150);
+    this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET});
 };
 
 Player.prototype = Object.create(GameObject.prototype);
 
 Player.prototype.constructor = Player;
 
-/*Player.prototype.MoveBarrel = function(direction)
+Player.prototype.Update = function(gameTime)
 {
-	if(direction == "vertical")
-	{
-		direction = "stationary";
-		this.imgPath = "turret_b.png";
-		this.Repaint();
-	}
-	else
-	{
-		direction = "vertical";
-		this.imgPath = "turret_a.png";
-		this.Repaint();
-	}
-}*/
-
-Player.prototype.Update = function()
-{
-	var angle = 0;
-	var bullet = new Bullet("tempshot.png", this.canvas, 5, 98, 20, 8, 50);
+    GameObject.prototype.Update.call(this, gameTime);
 	if(Player.controls.space)
 	{
-		//bullet.SetPosition(this.x, this.y);
-		GameManager.AddGameObject(bullet);
-		//this.usedAmmo.push(bullet);
+        var facing = this.GetFacing();
+        var startPosition = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET, facing));
+        var velocity = VectorMultiply(this.BULLET_SPEED,facing);
+        var bullet = new Bullet("tempshot.png", velocity, startPosition.x, startPosition.y);
 	}
 
-/*	if(Player.controls.up)
+  	if(Player.controls.left)
 	{
-		this.MoveBarrel("vertical");
-		var bullet = this.ammo.pop();
-		bullet.SetPosition(this.x, this.y);
-		this.ammo[this.ammo.length] = bullet;
-	}
-	if(Player.controls.down)
-	{
-		this.MoveBarrel("stationary");
-		var bullet = this.ammo.pop();
-		bullet.SetPosition(this.x, this.y);
-		this.ammo[this.ammo.length] = bullet;
-	}
-*/	if(Player.controls.left)
-	{
-		this.Rotate(-5);
-		bullet.Rotate(-5);
+        this.barrel.angle -= this.PLAYER_ROTATE_SPEED*gameTime;
 	}		
 	if(Player.controls.right)
 	{
-		this.Rotate(5);
-		bullet.Rotate(-5);
+        this.barrel.angle += this.PLAYER_ROTATE_SPEED*gameTime;
 	}
+};
+
+Player.prototype.GetFacing = function()
+{
+    return {x:Math.cos(this.barrel.angle-(Math.PI/2)), y:Math.sin(this.barrel.angle-(Math.PI/2))};
 };
 
 window.addEventListener("keydown", function(e){

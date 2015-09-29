@@ -1,13 +1,12 @@
-function Bullet(imgPath, canvas, speed, x, y, xScl, yScl)
+function Bullet(imgPath, velocity, x, y)
 {
-	
-	GameObject.call(this, imgPath, canvas, x, y, xScl, yScl);
+	Collidable.call(this, "Bullet", imgPath, {x:x, y:y}, 10, 10);
 	this.visible = false;
-	this.speed = speed;
+	this.velocity = velocity;
 	//this.collider = 
 };
 
-Bullet.prototype = Object.create(GameObject.prototype);
+Bullet.prototype = Object.create(Collidable.prototype);
 
 Bullet.prototype.constructor = Bullet;
 
@@ -17,7 +16,16 @@ Bullet.prototype.SetPosition = function(x, y)
 	this.y = y;
 }
 
-Bullet.prototype.Update = function()
+Bullet.prototype.Update = function(gameTime)
 {
-	this.y -= this.speed;
+    Collidable.prototype.Update.call(this, gameTime);
+	this.x += this.velocity.x*gameTime;
+	this.y += this.velocity.y*gameTime;
+
+    var canvasRect = new Rect(0, 0, GameManager.CANVAS_WIDTH, GameManager.CANVAS_HEIGHT);
+
+    if(!(canvasRect.Contains({x:this.x, y:this.y})))
+    {
+        this.Destroy();
+    }
 };

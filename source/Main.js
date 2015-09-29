@@ -5,20 +5,9 @@ $(document).ready(function(){
 
     GameManager.Start(updateInterval, drawInterval, physicsInterval);
 
-    var background = new GameObject("background-new vision.png", $("#canvas")[0], 0, 0, $("#canvas").width(), $("#canvas").height());
+    var background = new GameObject("background-new vision.png", $("#canvas").width()/2, $("#canvas").height()/2, $("#canvas").width(), $("#canvas").height());
 
-    var turretCvs = document.createElement("canvas");
-    turretCvs.id = "turretCvs";
-    turretCvs.width = 300;
-    turretCvs.height = 300;
-    turretCvs.display = 'block';
-
-    var turret1 = new Player("turret_a.png", turretCvs, 500, $("#turretCvs").width()/2, $("#turretCvs").height()/2, 200, 200);
-
-    document.getElementById("game").appendChild(turretCvs);
-
-    GameManager.AddGameObject(background);
-    GameManager.AddGameObject(turret1);
+    var turret1 = new Player(500, 200, 200, 200, 200);
 
     //Example/test code that shows how to add game objects and remove them from the game
     //manager
