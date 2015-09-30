@@ -18,6 +18,7 @@ var GameManager =
     __gameDrawLoop : null,
     __gamePhysicsLoop : null,
 
+    __paused : false,
     __gameState : "NONE",
 
     CANVAS_WIDTH : $("#canvas").width(),
@@ -49,14 +50,22 @@ var GameManager =
 
     Pause : function()
     {
+        this.__paused = true;
         if(typeof this.__gameUpdateLoop != "undefined") clearInterval(this.__gameUpdateLoop);
         if(typeof this.__gamePhysicsLoop != "undefined") clearInterval(this.__gamePhysicsLoop);
     },
 
     UnPause : function()
     {
+        if(this.__paused)
+        {
+            InputManager.UpdateEnd();
+        }
+
         //Reset any previous intervals
         this.Pause();
+
+        this.__paused = false;
 
         var gameManager = this;
         this.__gameUpdateLoop = setInterval(function(){gameManager.__Update()}, this.__updateInterval);
@@ -74,6 +83,7 @@ var GameManager =
     {
         this.__gameState = "UPDATING";
         this.__UpdateGameObject();
+        InputManager.UpdateEnd();
         this.__gameState = "NONE";
         this.__RemoveFinish();
     },
