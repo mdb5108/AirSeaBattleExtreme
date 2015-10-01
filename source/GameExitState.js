@@ -13,7 +13,7 @@ GameExitState.prototype.ResetProxy = function()
     {
         if(InputManager.getFire(0) || InputManager.getFire(1))
         {
-            GameManager.ChangeState(GameManager.GAME_STATE.PLAYING);
+            GameManager.ChangeState(GameManager.GAME_STATE.ENTER);
         }
     };
     object.Draw = function(canvas2D)
@@ -34,8 +34,9 @@ GameExitState.prototype.Enter = function()
     var gameExitState = this;
     this.resetTimeout = setTimeout(function(){
         gameExitState.resetProxy = gameExitState.ResetProxy();
-        gameExitState.text.Destroy();
-        gameExitState.text = new TextBanner(winText+"\r\nPress FIRE to restart", 50, 0);
+        if(gameExitState.instruction != undefined)
+            gameExitState.instruction.Destroy();
+        gameExitState.instruction = new TextBanner("Press FIRE to restart", 50, 50);
     }, RESTART_DELAY);
 };
 
@@ -45,6 +46,7 @@ GameExitState.prototype.Leave = function()
     this.text.Destroy();
     if(this.resetProxy != undefined)
     {
+        this.instruction.Destroy();
         this.resetProxy.Destroy();
         this.resetProxy = undefined;
     }
