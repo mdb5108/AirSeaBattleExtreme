@@ -73,6 +73,12 @@ Player.prototype.Update = function(gameTime)
     this.barrel.angle = this.BARREL_ROTATIONS[this.barrelRotation];
 };
 
+Player.prototype.Destroy = function()
+{
+    GameObject.prototype.Destroy.call(this);
+    this.barrel.Destroy();
+};
+
 Player.prototype.GetFacing = function()
 {
     return {x:Math.cos(this.barrel.angle-(Math.PI/2)), y:Math.sin(this.barrel.angle-(Math.PI/2))};
