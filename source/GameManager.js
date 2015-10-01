@@ -29,6 +29,7 @@ var GameManager =
     __GAME_STATES : [new GameEnterState(), new GamePlayState(), new GameExitState()],
     __gameState : undefined,
     __gameManagerState : "NONE",
+    __scores : [],
 
     CANVAS_WIDTH : $("#canvas").width(),
     CANVAS_HEIGHT : $("#canvas").height(),
@@ -46,6 +47,9 @@ var GameManager =
 
     Start : function()
     {
+        this.__scores[0] = 0;
+        this.__scores[1] = 0;
+
         this.Stop();
 
         //Set up game loops
@@ -117,8 +121,17 @@ var GameManager =
         canvas2D.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         canvas2D.strokeStyle = "black";
         canvas2D.strokeRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+
         this.__DrawGameObject(canvas2D);
         this.__DrawPause(canvas2D);
+
+        canvas2D.font = "20pt Arial";
+        canvas2D.fillText("Player1", 275, 520);
+        canvas2D.fillText("Player2", 650, 520);
+
+        canvas2D.fillText(this.__scores[0], 312, 550);
+        canvas2D.fillText(this.__scores[1], 685, 550);
+
         this.__gameManagerState = "NONE";
         this.__RemoveFinish();
     },

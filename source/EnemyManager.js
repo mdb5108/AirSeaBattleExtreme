@@ -95,7 +95,6 @@ EnemyManager.prototype.Update = function(gametime) {
         if(this.planes[i].getDeath())
             this.planes.splice(i,1);
     };
-
 };
 
 EnemyManager.prototype.Draw = function (){

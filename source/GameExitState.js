@@ -27,7 +27,16 @@ GameExitState.prototype.ResetProxy = function()
 GameExitState.prototype.Enter = function()
 {
     var RESTART_DELAY = 3000;
-    var winText = "PLAYER 1 WINS!!!";
+    var winner = "PLAYER ";
+    if(GameManager.__scores[0] >= GameManager.__scores[1])
+    {
+        winner += "1";
+    }
+    else
+    {
+        winner += "2";
+    }
+    var winText = winner + " WINS!!!";
 
     GameManager.Pause();
     this.text = new TextBanner(winText, 50, 0);

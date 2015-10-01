@@ -45,6 +45,14 @@ Plane.prototype.OnCollision = function(collider)
     Collidable.prototype.OnCollision(collider);
     if( collider.tag == "Bullet")
     {
+    	if(collider.playerNum == 0)
+    	{
+    		GameManager.__scores[0]++;
+    	}
+    	else
+    	{
+    		GameManager.__scores[1]++;
+    	}
         this.is_dead = true;
         this.Destroy();
     }
