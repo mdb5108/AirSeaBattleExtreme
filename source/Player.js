@@ -129,7 +129,6 @@ function Player(playerNum, x, y)
 
 	GameObject.call(this, "turret_b.png", x, y, 105, 150);
     this.angle = 0;
-	this.health = health;
 
     this.barrel = new GameObject("turret_a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
     this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET_TO_BASE});

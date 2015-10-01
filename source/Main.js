@@ -8,8 +8,8 @@ $(document).ready(function(){
 
     var background = new GameObject("background-new vision.png", $("#canvas").width()/2, $("#canvas").height()/2, $("#canvas").width(), $("#canvas").height());
 
-    var turret1 = new Player(0, 500, 800, 535);
-    var turret2 = new Player(1, 500, 200, 535);
+    var turret1 = new Player(0, 800, 535);
+    var turret2 = new Player(1, 200, 535);
     var timer = new Timer(120, $("#canvas").width() / 2 - 50, $("#canvas").height() - 15);
 
 //enemy
