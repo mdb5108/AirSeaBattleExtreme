@@ -22,10 +22,11 @@ var GameManager =
 
     __paused : false,
     GAME_STATE : {
-        PLAYING: 0,
-        EXIT: 1,
+        ENTER: 0,
+        PLAYING: 1,
+        EXIT: 2,
     },
-    __GAME_STATES : [new GamePlayState(), new GameExitState()],
+    __GAME_STATES : [new GameEnterState(), new GamePlayState(), new GameExitState()],
     __gameState : undefined,
     __gameManagerState : "NONE",
 
@@ -56,7 +57,7 @@ var GameManager =
         this.__gameUpdateLoop = setInterval(function(){gameManager.__Update()}, this.__updateInterval);
         this.__gamePhysicsLoop = setInterval(function(){gameManager.__PhysicsUpdate()}, this.__physicsInterval);
 
-        this.ChangeState(this.GAME_STATE.PLAYING);
+        this.ChangeState(this.GAME_STATE.ENTER);
     },
 
     Pause : function()
