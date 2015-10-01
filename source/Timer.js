@@ -6,7 +6,6 @@ function Timer(initSeconds, x, y)
     this.y = y;
     this.time = "";
     this.seconds = initSeconds;
-    this.Timing = setInterval(function(){t.Draw(document.getElementById("canvas").getContext('2d'))}, 1000);
 }
 
 Timer.prototype.constructor = Timer;
