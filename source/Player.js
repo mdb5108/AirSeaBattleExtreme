@@ -50,7 +50,7 @@ Player.controls = {
         switch(e.keyCode)
         {
             //Player 1
-            case 96: //numpad 0
+            case 32: //Enter
                 this.__FIRE[0] = true;
                 break;
             case 37: // left arrow
@@ -61,7 +61,7 @@ Player.controls = {
                 break;
 
             //Player 2
-            case 32: // spacebar
+            case 13: // spacebar
                 this.__FIRE[1] = true;
                 break;
             case 65: // a
@@ -78,7 +78,7 @@ Player.controls = {
         switch(e.keyCode)
         {
             //Player 1
-            case 96: //numpad 0
+            case 32: //numpad 0
                 this.__FIRE[0] = false;
                 break;
             case 37: // left arrow
@@ -89,7 +89,7 @@ Player.controls = {
                 break;
 
             //Player 2
-            case 32: // spacebar
+            case 13: // spacebar
                 this.__FIRE[1] = false;
                 break;
             case 65: // a
@@ -133,6 +133,7 @@ function Player(playerNum, health, x, y)
 
     this.barrel = new GameObject("turret_a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
     this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET_TO_BASE});
+    this.score = 0;
 };
 
 Player.prototype = Object.create(GameObject.prototype);
@@ -159,6 +160,7 @@ Player.prototype.Update = function(gameTime)
         var startPosition = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET_TO_BASE+this.BARREL_OFFSET_TO_TIP, facing));
         var velocity = VectorMultiply(this.BULLET_SPEED,facing);
         var bullet = new Bullet("tempshot.png", velocity, startPosition.x, startPosition.y);
+        this.score++;
         this.canFire = false;
 	}
 
@@ -182,6 +184,21 @@ Player.prototype.Update = function(gameTime)
 
     Player.controls.UpdateEnd(this.playerNum);
 };
+
+Player.prototype.Draw = function(canvas2D)
+{
+    canvas2D.font = "20pt Arial";
+    canvas2D.fillText("Player 1", 315, 520);
+    canvas2D.fillText("Player 2", 600, 520);
+    if(this.playerNum == 0)
+    {
+        canvas2D.fillText(this.score, 350, 555);
+    }
+    else
+    {
+        canvas2D.fillText(this.score, 635, 555);
+    }
+}
 
 Player.prototype.GetFacing = function()
 {
