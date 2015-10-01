@@ -21,7 +21,7 @@ GamePlayState.prototype.Enter = function()
     this.turret1 = new Player(0, 200, 535);
     this.turret2 = new Player(1, 800, 535);
     this.timer = new Timer(120, GameManager.CANVAS_WIDTH / 2 - 50, GameManager.CANVAS_HEIGHT - 15);
-    this.enemymanager = new EnemyManager("airplane1.png");
+    this.enemymanager = new EnemyManager();
 //enemy
     // enemy.setVelocity = new vec2(5,0);
     // GameManager.AddGameObject(enemy);
