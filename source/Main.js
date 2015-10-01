@@ -10,6 +10,11 @@ $(document).ready(function(){
     var turret1 = new Player(0, 500, 800, 535);
     var turret2 = new Player(1, 500, 200, 535);
 
+//enemy
+    var enemymanager = new EnemyManager("airplane1.png",$("#canvas")[0],0, 0, 200, 200);
+    // enemy.setVelocity = new vec2(5,0);
+    // GameManager.AddGameObject(enemy);
+
     //Example/test code that shows how to add game objects and remove them from the game
     //manager
 /*    var gameObject = {

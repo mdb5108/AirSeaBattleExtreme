@@ -22,7 +22,6 @@ GameObject.prototype.constructor = GameObject;
 
 GameObject.prototype.Draw = function(canvas2D)
 {
-
     canvas2D.save();
     //Center
     canvas2D.translate(this.x, this.y);
