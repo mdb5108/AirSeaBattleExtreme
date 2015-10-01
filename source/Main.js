@@ -8,7 +8,6 @@ $(document).ready(function(){
     GameManager.Start();
 
 
-
     //Example/test code that shows how to add game objects and remove them from the game
     //manager
 /*    var gameObject = {

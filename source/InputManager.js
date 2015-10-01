@@ -95,24 +95,24 @@ var InputManager = {
         switch(e.keyCode)
         {
             //Player 1
-            case 96: //numpad 0
+            case 32: // spacebar
                 this.__FIRE[0] = true;
                 break;
-            case 37: // left arrow
+            case 65: // a
                 this.__setLeft(0, true);
                 break;
-            case 39: // right arrow
+            case 68: // d
                 this.__setRight(0, true);
                 break;
 
             //Player 2
-            case 32: // spacebar
+            case 13: // enter
                 this.__FIRE[1] = true;
                 break;
-            case 65: // a
+            case 37: // left arrow
                 this.__setLeft(1, true);
                 break;
-            case 68: // d
+            case 39: // right arrow
                 this.__setRight(1, true);
                 break;
         }
@@ -123,24 +123,24 @@ var InputManager = {
         switch(e.keyCode)
         {
             //Player 1
-            case 96: //numpad 0
+            case 32: // enter
                 this.__FIRE[0] = false;
                 break;
-            case 37: // left arrow
+            case 65: // a
                 this.__setLeftUnPressed(0);
                 break;
-            case 39: // right arrow
+            case 68: // d
                 this.__setRightUnPressed(0);
                 break;
 
             //Player 2
-            case 32: // spacebar
+            case 13: // spacebar
                 this.__FIRE[1] = false;
                 break;
-            case 65: // a
+            case 37: // left arrow
                 this.__setLeftUnPressed(1);
                 break;
-            case 68: // d
+            case 39: // right arrow
                 this.__setRightUnPressed(1);
                 break;
         }

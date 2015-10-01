@@ -117,7 +117,6 @@ var GameManager =
         canvas2D.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         canvas2D.strokeStyle = "black";
         canvas2D.strokeRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
-
         this.__DrawGameObject(canvas2D);
         this.__gameManagerState = "NONE";
         this.__RemoveFinish();

@@ -1,10 +1,6 @@
-#turretCvs
-{
-	display: block;
-	margin-left: 60%;
-	margin-top: -15%;
-}
-#bulletCvs
+#timerCanvas
 {
 	position: absolute;
+	margin-top: 32%;
+	margin-left: 22%;
 }
