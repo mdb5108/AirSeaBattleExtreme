@@ -107,7 +107,7 @@ Player.controls = {
     }
 };
 
-function Player(playerNum, health, x, y)
+function Player(playerNum, x, y)
 {
     this.BARREL_ROTATE_MAX = Math.PI/4;
     this.BARREL_ROTATE_MIN = -Math.PI/4;
@@ -154,7 +154,7 @@ Player.prototype.Update = function(gameTime)
         }
     }
 
-	if(Player.controls.getFire(this.playerNum) && this.canFire)
+	if(InputManager.getFire(this.playerNum) && this.canFire)
 	{
         var facing = this.GetFacing();
         var startPosition = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET_TO_BASE+this.BARREL_OFFSET_TO_TIP, facing));
@@ -164,7 +164,7 @@ Player.prototype.Update = function(gameTime)
         this.canFire = false;
 	}
 
-  	if(Player.controls.getLeft(this.playerNum))
+  	if(InputManager.getLeft(this.playerNum))
 	{
         this.barrelRotation--;
         if(!(this.barrelRotation >= 0 && this.barrelRotation < this.BARREL_ROTATIONS.length))
@@ -172,7 +172,7 @@ Player.prototype.Update = function(gameTime)
             this.barrelRotation++;
         }
 	}		
-	if(Player.controls.getRight(this.playerNum))
+	if(InputManager.getRight(this.playerNum))
 	{
         this.barrelRotation++;
         if(!(this.barrelRotation >= 0 && this.barrelRotation < this.BARREL_ROTATIONS.length))
@@ -181,8 +181,6 @@ Player.prototype.Update = function(gameTime)
         }
 	}
     this.barrel.angle = this.BARREL_ROTATIONS[this.barrelRotation];
-
-    Player.controls.UpdateEnd(this.playerNum);
 };
 
 Player.prototype.Draw = function(canvas2D)
@@ -205,10 +203,3 @@ Player.prototype.GetFacing = function()
     return {x:Math.cos(this.barrel.angle-(Math.PI/2)), y:Math.sin(this.barrel.angle-(Math.PI/2))};
 };
 
-window.addEventListener("keydown", function(e){
-    Player.controls.handleKeyDown(e);
-}, false);
-
-window.addEventListener("keyup", function(e){
-    Player.controls.handleKeyUp(e);
-}, false);
