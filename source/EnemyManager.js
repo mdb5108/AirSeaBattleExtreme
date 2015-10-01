@@ -7,10 +7,10 @@ function Vec2(x,y)
 	this.y = y;
 }
 
-function EnemyManager(imgPath, x, y, xScl, yScl)
+function EnemyManager(imgPath)
 {
 	
-	GameObject.call(this, imgPath, x, y, xScl, yScl);
+	GameObject.call(this, imgPath, 0,0,200,200);
 	// this.visible = true;	
 	// this.imgPath = imgPath;
 	// this.x = x;
