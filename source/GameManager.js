@@ -145,21 +145,21 @@ var GameManager =
 
     RemoveGameObject : function(gameObject)
     {
-        this.__RemoveFromList(function(){return this.__gameManagerState == "UPDATING" || this.__gameManagerState == "DRAWING";},
+        this.__RemoveFromList(function(){return GameManager.__gameManagerState == "UPDATING" || this.__gameManagerState == "DRAWING";},
                               this.__gameObjects,
                               this.__gameObjectsToRemove,
                               gameObject);
     },
     RemoveCollidable : function(collidable)
     {
-        this.__RemoveFromList(function(){return this.__gameManagerState == "PHYSICS";},
+        this.__RemoveFromList(function(){return GameManager.__gameManagerState == "PHYSICS";},
                               this.__collidables,
                               this.__collidablesToRemove,
                               collidable);
     },
     RemovePauseUpdate : function(gameObject)
     {
-        this.__RemoveFromList(function(){return this.__gameManagerState == "UPDATING" || this.__gameManagerState == "DRAWING";},
+        this.__RemoveFromList(function(){return GameManager.__gameManagerState == "UPDATING" || this.__gameManagerState == "DRAWING";},
                               this.__pauseObjects,
                               this.__pauseObjectsToRemove,
                               gameObject);
@@ -168,7 +168,7 @@ var GameManager =
     {
         if(check())
         {
-            listRemove.push(collidable);
+            listRemove.push(item);
         }
         else
         {
@@ -231,7 +231,7 @@ var GameManager =
     {
         for(var i = 0; i < this.__collidables.length; i++)
         {
-            for(j = i+1; j < this.__collidables.length; j++)
+            for(var j = i+1; j < this.__collidables.length; j++)
             {
                 if(this.__collidables[i].GetCollider().Intersects(this.__collidables[j].GetCollider()))
                 {
