@@ -1,6 +1,7 @@
 function GameExitState()
 {
     State.call(this);
+    this.text = null;
 };
 
 GameExitState.prototype.constructor = GameExitState;
@@ -28,15 +29,29 @@ GameExitState.prototype.Enter = function()
 {
     var RESTART_DELAY = 3000;
     var winner = "PLAYER ";
-    if(GameManager.__scores[0] >= GameManager.__scores[1])
+    var winText = "";
+
+    if(GameManager.__scores[0] > GameManager.__scores[1])
     {
         winner += "1";
+    }
+    else if(GameManager.__scores[0] == GameManager.__scores[1])
+    {
+        winner = "";
     }
     else
     {
         winner += "2";
     }
-    var winText = winner + " WINS!!!";
+
+    if(GameManager.__scores[0] == GameManager.__scores[1])
+    {
+        winText = "It's a Draw!!";
+    }
+    else
+    {
+        winText = winner + " WINS!!!";
+    }
 
     GameManager.Pause();
     this.text = new TextBanner(winText, 50, 0);
@@ -52,7 +67,11 @@ GameExitState.prototype.Enter = function()
 GameExitState.prototype.Leave = function()
 {
     clearTimeout(this.resetTimeout);
-    this.text.Destroy();
+    if(this.text != null)
+    {
+        this.text.Destroy();
+    }
+
     if(this.resetProxy != undefined)
     {
         this.instruction.Destroy();
