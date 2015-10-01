@@ -75,6 +75,7 @@ Player.prototype.Update = function(gameTime)
 
 Player.prototype.Draw = function(canvas2D)
 {
+    GameObject.prototype.Draw.call(this, canvas2D);
     canvas2D.font = "20pt Arial";
     canvas2D.fillText("Player1", 275, 520);
     canvas2D.fillText("Player2", 650, 520);
