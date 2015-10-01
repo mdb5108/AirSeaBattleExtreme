@@ -15,6 +15,7 @@ function GameObject(imgPath, x, y, xScl, yScl)
 	this.img = new Image();
     this.angle = 0;
     this.imageOffset = {x:0, y:0};
+    this.updateDuringPause = false;
     GameManager.AddGameObject(this);
 };
 
@@ -37,6 +38,24 @@ GameObject.prototype.Update = function()
 {
 };
 
+GameObject.prototype.SetUpdateDuringPause = function(toUpdate)
+{
+    if(toUpdate != this.updateDuringPause)
+    {
+        if(this.updateDuringPause)
+        {
+            GameManager.RemovePauseUpdate(this);
+            GameManager.AddGameObject(this);
+        }
+        else
+        {
+            GameManager.RemoveGameObject(this);
+            GameManager.AddPauseUpdate(this);
+        }
+        this.updateDuringPause = toUpdate;
+    }
+};
+
 GameObject.prototype.SetImageOffset = function(position)
 {
     this.imageOffset = position;
@@ -44,5 +63,12 @@ GameObject.prototype.SetImageOffset = function(position)
 
 GameObject.prototype.Destroy = function()
 {
-    GameManager.RemoveGameObject(this);
+    if(this.updateDuringPause)
+    {
+        GameManager.RemovePauseUpdate(this);
+    }
+    else
+    {
+        GameManager.RemoveGameObject(this);
+    }
 }

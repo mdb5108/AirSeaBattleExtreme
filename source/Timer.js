@@ -19,6 +19,7 @@ Timer.prototype.Update = function(gameTime)
     
     if(Math.floor(this.seconds) < 0)
     {
+        GameManager.ChangeState(GameManager.GAME_STATE.EXIT);
         this.seconds = 0;
         clearInterval(this.Timing);
     }

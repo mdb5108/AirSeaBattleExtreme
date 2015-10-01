@@ -6,9 +6,11 @@ var GameManager =
 
     __gameObjects : [],
     __collidables : [],
+    __pauseObjects : [],
 
     __gameObjectsToRemove : [],
     __collidablesToRemove : [],
+    __pauseObjectsToRemove : [],
 
     __updateInterval : null,
     __drawInterval : null,
@@ -19,7 +21,14 @@ var GameManager =
     __gamePhysicsLoop : null,
 
     __paused : false,
-    __gameState : "NONE",
+    GAME_STATE : {
+        ENTER: 0,
+        PLAYING: 1,
+        EXIT: 2,
+    },
+    __GAME_STATES : [new GameEnterState(), new GamePlayState(), new GameExitState()],
+    __gameState : undefined,
+    __gameManagerState : "NONE",
     __scores : [],
 
     CANVAS_WIDTH : $("#canvas").width(),
@@ -49,14 +58,15 @@ var GameManager =
         var gameManager = this;
         var canvas2D = $("#canvas")[0].getContext("2d");
         this.__gameDrawLoop = setInterval(function(){gameManager.__Draw(canvas2D)}, this.__drawInterval);
-        this.UnPause();
+        this.__gameUpdateLoop = setInterval(function(){gameManager.__Update()}, this.__updateInterval);
+        this.__gamePhysicsLoop = setInterval(function(){gameManager.__PhysicsUpdate()}, this.__physicsInterval);
+
+        this.ChangeState(this.GAME_STATE.ENTER);
     },
 
     Pause : function()
     {
         this.__paused = true;
-        if(typeof this.__gameUpdateLoop != "undefined") clearInterval(this.__gameUpdateLoop);
-        if(typeof this.__gamePhysicsLoop != "undefined") clearInterval(this.__gamePhysicsLoop);
     },
 
     UnPause : function()
@@ -70,31 +80,42 @@ var GameManager =
         this.Pause();
 
         this.__paused = false;
-
-        var gameManager = this;
-        this.__gameUpdateLoop = setInterval(function(){gameManager.__Update()}, this.__updateInterval);
-        this.__gamePhysicsLoop = setInterval(function(){gameManager.__PhysicsUpdate()}, this.__physicsInterval);
     },
 
     Stop : function()
     {
         //Stop loops if they are already going
         if(typeof this.__gameDrawLoop != "undefined") clearInterval(this.__gameDrawLoop);
+        if(typeof this.__gameUpdateLoop != "undefined") clearInterval(this.__gameUpdateLoop);
+        if(typeof this.__gamePhysicsLoop != "undefined") clearInterval(this.__gamePhysicsLoop);
         this.Pause();
+    },
+
+    ChangeState : function(stateEnum)
+    {
+        if(this.__gameState != undefined)
+        {
+            this.__gameState.Leave();
+        }
+
+        this.__gameState = this.__GAME_STATES[stateEnum];
+        this.__gameState.Enter();
     },
 
     __Update : function()
     {
-        this.__gameState = "UPDATING";
-        this.__UpdateGameObject();
+        this.__gameManagerState = "UPDATING";
+        if(!this.__paused)
+            this.__UpdateGameObject();
+        this.__UpdatePause();
         InputManager.UpdateEnd();
-        this.__gameState = "NONE";
+        this.__gameManagerState = "NONE";
         this.__RemoveFinish();
     },
 
     __Draw : function(canvas2D)
     {
-        this.__gameState = "DRAWING";
+        this.__gameManagerState = "DRAWING";
         //Draw Canvas border
         canvas2D.fillStyle = "white";
         canvas2D.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
@@ -102,6 +123,7 @@ var GameManager =
         canvas2D.strokeRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 
         this.__DrawGameObject(canvas2D);
+        this.__DrawPause(canvas2D);
 
         canvas2D.font = "20pt Arial";
         canvas2D.fillText("Player1", 275, 520);
@@ -110,15 +132,15 @@ var GameManager =
         canvas2D.fillText(this.__scores[0], 312, 550);
         canvas2D.fillText(this.__scores[1], 685, 550);
 
-        this.__gameState = "NONE";
+        this.__gameManagerState = "NONE";
         this.__RemoveFinish();
     },
 
     __PhysicsUpdate : function()
     {
-        this.__gameState = "PHYSICS";
+        this.__gameManagerState = "PHYSICS";
         this.__UpdateCollidable();
-        this.__gameState = "NONE";
+        this.__gameManagerState = "NONE";
         this.__RemoveFinish();
     },
 
@@ -130,47 +152,50 @@ var GameManager =
     {
         this.__collidables.push(collidable);
     },
+    AddPauseUpdate : function(gameObject)
+    {
+        this.__pauseObjects.push(gameObject);
+    },
 
     RemoveGameObject : function(gameObject)
     {
-        if(this.__gameState == "UPDATING" || this.__gameState == "DRAWING")
-        {
-            this.__gameObjectsToRemove.push(gameObject);
-        }
-        else
-        {
-            this.__RemoveGameObjectInstant(gameObject);
-        }
-    },
-    __RemoveGameObjectInstant : function(gameObject)
-    {
-        for(var i = 0; i < this.__gameObjects.length; i++)
-        {
-            if(this.__gameObjects[i].id == gameObject.id)
-            {
-                this.__gameObjects.splice(i, 1);
-                break;
-            }
-        }
+        this.__RemoveFromList(function(){return GameManager.__gameManagerState == "UPDATING" || this.__gameManagerState == "DRAWING";},
+                              this.__gameObjects,
+                              this.__gameObjectsToRemove,
+                              gameObject);
     },
     RemoveCollidable : function(collidable)
     {
-        if(this.__gameState == "PHYSICS")
+        this.__RemoveFromList(function(){return GameManager.__gameManagerState == "PHYSICS";},
+                              this.__collidables,
+                              this.__collidablesToRemove,
+                              collidable);
+    },
+    RemovePauseUpdate : function(gameObject)
+    {
+        this.__RemoveFromList(function(){return GameManager.__gameManagerState == "UPDATING" || this.__gameManagerState == "DRAWING";},
+                              this.__pauseObjects,
+                              this.__pauseObjectsToRemove,
+                              gameObject);
+    },
+    __RemoveFromList : function(check, list, listRemove, item)
+    {
+        if(check())
         {
-            this.__collidablesToRemove.push(collidable);
+            listRemove.push(item);
         }
         else
         {
-            this.__RemoveCollidableInstant(collidable);
+            this.__RemoveListInstant(list, item);
         }
     },
-    __RemoveCollidableInstant : function(collidable)
+    __RemoveListInstant : function(list, item)
     {
-        for(var i = 0; i < this.__collidables.length; i++)
+        for(var i = 0; i < list.length; i++)
         {
-            if(this.__collidables[i].id == collidable.id)
+            if(list[i].id == item.id)
             {
-                this.__collidables.splice(i, 1);
+                list.splice(i, 1);
                 break;
             }
         }
@@ -180,14 +205,19 @@ var GameManager =
     {
         for(var i = 0; i < this.__gameObjectsToRemove.length; i++)
         {
-            this.__RemoveGameObjectInstant(this.__gameObjectsToRemove[i]);
+            this.__RemoveListInstant(this.__gameObjects, this.__gameObjectsToRemove[i]);
         }
         for(var i = 0; i < this.__collidablesToRemove.length; i++)
         {
-            this.__RemoveCollidableInstant(this.__collidablesToRemove[i]);
+            this.__RemoveListInstant(this.__collidables, this.__collidablesToRemove[i]);
+        }
+        for(var i = 0; i < this.__pauseObjectsToRemove.length; i++)
+        {
+            this.__RemoveListInstant(this.__pauseObjects, this.__pauseObjectsToRemove[i]);
         }
         this.__gameObjectsToRemove = [];
         this.__collidablesToRemove = [];
+        this.__pauseObjectsToRemove = [];
     },
 
     __UpdateGameObject : function()
@@ -204,11 +234,25 @@ var GameManager =
             this.__gameObjects[i].Draw(canvas2D);
         }
     },
+    __DrawPause : function(canvas2D)
+    {
+        for(var i = 0; i < this.__pauseObjects.length; i++)
+        {
+            this.__pauseObjects[i].Draw(canvas2D);
+        }
+    },
+    __UpdatePause : function()
+    {
+        for(var i = 0; i < this.__pauseObjects.length; i++)
+        {
+            this.__pauseObjects[i].Update(this.__gameTimeMilli*.001);
+        }
+    },
     __UpdateCollidable : function()
     {
         for(var i = 0; i < this.__collidables.length; i++)
         {
-            for(j = i+1; j < this.__collidables.length; j++)
+            for(var j = i+1; j < this.__collidables.length; j++)
             {
                 if(this.__collidables[i].GetCollider().Intersects(this.__collidables[j].GetCollider()))
                 {

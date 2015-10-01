@@ -6,10 +6,10 @@ function Vec2(x,y)
     this.y = y;
 }
 
-function EnemyManager( x, y, xScl, yScl)
+function EnemyManager()
 {
     
-    GameObject.call(this, this.imgPath, x, y, xScl, yScl);
+    GameObject.call(this, "", 0,0,200,200);
     this.planes = [];
     this.imgPath = "airplane1.png";
     this.time_delay = 2;
@@ -83,7 +83,7 @@ EnemyManager.prototype.Update = function(gametime) {
         if (Math.random() < 0.5)
             this.planes.push(new Plane(this.planes_path[this.plane_type], 0, 50 * current_lane ,veloObj,1,points));
         else
-            this.planes.push(new Plane(this.planes_path[this.plane_type],$("#canvas").width(), 50 * current_lane ,this.negateVelocity(veloObj),-1,points));        
+            this.planes.push(new Plane(this.planes_path[this.plane_type],GameManager.CANVAS_WIDTH, 50 * current_lane ,this.negateVelocity(veloObj),-1,points));        
         this.counter = this.time_delay;        
     }    
     else
@@ -101,6 +101,18 @@ EnemyManager.prototype.Draw = function (){
 //leaving it empty for the override
 }
 
+EnemyManager.prototype.Destroy = function() {
+    GameObject.prototype.Destroy.call(this);
+    this.Clear();
+}
+
+EnemyManager.prototype.Clear = function() {
+    for(var i = 0; i < this.planes.length; i++)
+    {
+        this.planes[i].Destroy();
+    }
+    this.planes = [];
+}
 
 EnemyManager.prototype.negateVelocity = function(veloObj) {
     veloObj.x = -1 * veloObj.x;

@@ -71,6 +71,12 @@ Player.prototype.Update = function(gameTime)
     this.barrel.angle = this.BARREL_ROTATIONS[this.barrelRotation];
 };
 
+Player.prototype.Destroy = function()
+{
+    GameObject.prototype.Destroy.call(this);
+    this.barrel.Destroy();
+};
+
 Player.prototype.Draw = function(canvas2D)
 {
     GameObject.prototype.Draw.call(this, canvas2D);

@@ -5,6 +5,14 @@ var InputManager = {
     __RIGHT_REDO: [true, true],
     __FIRE: [false, false],
 
+    __blockLeftTimeout: undefined,
+    __blockRightTimeout: undefined,
+    __blockFireTimeout: undefined,
+
+    __blockLeft: false,
+    __blockRight: false,
+    __blockFire: false,
+
     __setLeft: function(number, value)
     {
         if(this.__LEFT_REDO[number])
@@ -33,15 +41,52 @@ var InputManager = {
 
     getLeft: function(number)
     {
-        return this.__LEFT[number];
+        if(!this.__blockLeft)
+            return this.__LEFT[number];
+        return false;
     },
     getRight: function(number)
     {
-        return this.__RIGHT[number];
+        if(!this.__blockRight)
+            return this.__RIGHT[number];
+        return false;
     },
     getFire: function(number)
     {
-        return this.__FIRE[number];
+        if(!this.__blockFire)
+            return this.__FIRE[number];
+        return false;
+    },
+
+    blockLeft: function(timeout)
+    {
+        this.__blockLeft = true;
+        var inputManager = this;
+        this.__blockLeftTimeout = setTimeout(function()
+        {
+            inputManager.__blockLeft = false;
+        },
+        timeout);;
+    },
+    blockRight: function(timeout)
+    {
+        this.__blockRight = true;
+        var inputManager = this;
+        this.__blockRightTimeout = setTimeout(function()
+        {
+            inputManager.__blockRight = false;
+        },
+        timeout);;
+    },
+    blockFire: function(timeout)
+    {
+        this.__blockFire = true;
+        var inputManager = this;
+        this.__blockFireTimeout = setTimeout(function()
+        {
+            inputManager.__blockFire = false;
+        },
+        timeout);;
     },
 
     handleKeyDown: function(e)

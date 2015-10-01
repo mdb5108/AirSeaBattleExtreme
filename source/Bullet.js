@@ -4,8 +4,22 @@ function Bullet(imgPath, playerNum, velocity, x, y)
     this.playerNum = playerNum;
     this.visible = false;
     this.velocity = velocity;
-	//this.collider = 
+
+    Bullet.bullets.push(this);
+    Bullet.__clearing = false;
 };
+
+Bullet.bullets = [];
+Bullet.Clear = function()
+{
+    Bullet.__clearing = true;
+    for(var i = 0; i < Bullet.bullets.length; i++)
+    {
+        Bullet.bullets[i].Destroy();
+    }
+    Bullet.bullets = [];
+    Bullet.__clearing = false;
+}
 
 Bullet.prototype = Object.create(Collidable.prototype);
 
@@ -37,5 +51,21 @@ Bullet.prototype.OnCollision = function(collider)
     if(collider.tag != "Player1" && collider.tag != "Player2" && collider.tag != "Bullet")
     {
         this.Destroy();
+    }
+};
+
+Bullet.prototype.Destroy = function()
+{
+    Collidable.prototype.Destroy.call(this);
+    if(!Bullet.__clearing)
+    {
+        for(var i = 0; i < Bullet.bullets.length; i++)
+        {
+            if(Bullet.bullets[i].id == this.id)
+            {
+                Bullet.bullets.splice(i,i);
+                break;
+            }
+        }
     }
 };
