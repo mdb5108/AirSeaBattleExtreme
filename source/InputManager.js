@@ -78,7 +78,7 @@ var InputManager = {
         switch(e.keyCode)
         {
             //Player 1
-            case 13: // enter
+            case 32: // enter
                 this.__FIRE[0] = false;
                 break;
             case 65: // a
@@ -89,7 +89,7 @@ var InputManager = {
                 break;
 
             //Player 2
-            case 32: // spacebar
+            case 13: // spacebar
                 this.__FIRE[1] = false;
                 break;
             case 37: // left arrow
