@@ -33,6 +33,9 @@ GameEnterState.prototype.Enter = function()
     this.title = new TextBanner("Air Sea Battle", 50, -FONT_HEIGHT);
     this.subTitle = new TextBanner("EXTREME", 50, 0);
     this.instruction = new TextBanner("Press FIRE to start", 50, FONT_HEIGHT);
+    this.instruction.SetUpdateDuringPause(true);
+    this.instruction.SetFlicker(1.5);
+
     this.startProxy = GameEnterState.prototype.StartProxy();
 };
 
