@@ -5,6 +5,7 @@ function Bullet(imgPath, velocity, x, y)
 	this.velocity = velocity;
 	//this.collider = 
     Bullet.bullets.push(this);
+    Bullet.__clearing = false;
 };
 
 Bullet.bullets = [];
