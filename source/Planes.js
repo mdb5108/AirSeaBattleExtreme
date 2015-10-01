@@ -47,11 +47,11 @@ Plane.prototype.OnCollision = function(collider)
     {
     	if(collider.playerNum == 0)
     	{
-    		GameManager.__scores[0]++;
+    		GameManager.__scores[0] += this.points;
     	}
     	else
     	{
-    		GameManager.__scores[1]++;
+    		GameManager.__scores[1] += this.points;
     	}
         this.is_dead = true;
         this.Destroy();
