@@ -50,7 +50,7 @@ Player.controls = {
         switch(e.keyCode)
         {
             //Player 1
-            case 32: //Enter
+            case 32: //numpad 0
                 this.__FIRE[0] = true;
                 break;
             case 37: // left arrow
@@ -127,10 +127,10 @@ function Player(playerNum, x, y)
 
     this.playerNum = playerNum;
 
-	GameObject.call(this, "turret_b.png", x, y, 105, 150);
-    this.angle = 0;
-
+    GameObject.call(this, "turret_b.png", x, y, 105, 150);
+    
     this.barrel = new GameObject("turret_a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
+    this.barrel.angle = 0;
     this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET_TO_BASE});
     this.score = 0;
 };
@@ -159,9 +159,9 @@ Player.prototype.Update = function(gameTime)
         var startPosition = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET_TO_BASE+this.BARREL_OFFSET_TO_TIP, facing));
         var velocity = VectorMultiply(this.BULLET_SPEED,facing);
         var bullet = new Bullet("tempshot.png", velocity, startPosition.x, startPosition.y);
-        this.score++;
         this.canFire = false;
-	}
+        this.score++;
+    }
 
   	if(InputManager.getLeft(this.playerNum))
 	{
@@ -178,22 +178,22 @@ Player.prototype.Update = function(gameTime)
         {
             this.barrelRotation--;
         }
-	}
+    }
     this.barrel.angle = this.BARREL_ROTATIONS[this.barrelRotation];
 };
 
 Player.prototype.Draw = function(canvas2D)
 {
     canvas2D.font = "20pt Arial";
-    canvas2D.fillText("Player 1", 315, 520);
-    canvas2D.fillText("Player 2", 600, 520);
+    canvas2D.fillText("Player1", 275, 520);
+    canvas2D.fillText("Player2", 650, 520);
     if(this.playerNum == 0)
     {
-        canvas2D.fillText(this.score, 350, 555);
+        canvas2D.fillText(this.score, 312, 550);
     }
     else
     {
-        canvas2D.fillText(this.score, 635, 555);
+        canvas2D.fillText(this.score, 685, 550);
     }
 }
 
