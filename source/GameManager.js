@@ -10,39 +10,80 @@ var GameManager =
     __gameObjectsToRemove : [],
     __collidablesToRemove : [],
 
+    __updateInterval : null,
+    __drawInterval : null,
+    __physicsInterval : null,
+
     __gameUpdateLoop : null,
     __gameDrawLoop : null,
     __gamePhysicsLoop : null,
 
+    __paused : false,
     __gameState : "NONE",
 
     CANVAS_WIDTH : $("#canvas").width(),
     CANVAS_HEIGHT : $("#canvas").height(),
 
-    Start : function(updateInterval, drawInterval, physicsInterval)
+    InitializeIntervals : function(updateInterval, drawInterval, physicsInterval)
     {
-        //Set up the amount of time that passes in an update
-        this.__gameTimeMilli = updateInterval;
+        this.__updateInterval = updateInterval;
+        this.__drawInterval = drawInterval;
+        this.__physicsInterval = physicsInterval;
 
-        //Stop loops if they are already going
-        if(typeof this.__gameUpdateLoop != "undefined") clearInterval(this.__gameUpdateLoop);
-        if(typeof this.__gameDrawLoop != "undefined") clearInterval(this.__gameDrawLoop);
-        if(typeof this.__gamePhysicsLoop != "undefined") clearInterval(this.__gamePhysicsLoop);
+        //Set up the amount of time that passes in an update
+        //(currently the same as the update interval)
+        this.__gameTimeMilli = updateInterval;
+    },
+
+    Start : function()
+    {
+        this.Stop();
 
         //Set up game loops
         //NOTE: I wrap the update function calls in functions so the 'this' variable
         //passed to them is of the object and not the global scope.
         var gameManager = this;
         var canvas2D = $("#canvas")[0].getContext("2d");
-        this.__gameUpdateLoop = setInterval(function(){gameManager.__Update()}, updateInterval);
-        this.__gameDrawLoop = setInterval(function(){gameManager.__Draw(canvas2D)}, drawInterval);
-        this.__gamePhysicsLoop = setInterval(function(){gameManager.__PhysicsUpdate()}, physicsInterval);
+        this.__gameDrawLoop = setInterval(function(){gameManager.__Draw(canvas2D)}, this.__drawInterval);
+        this.UnPause();
+    },
+
+    Pause : function()
+    {
+        this.__paused = true;
+        if(typeof this.__gameUpdateLoop != "undefined") clearInterval(this.__gameUpdateLoop);
+        if(typeof this.__gamePhysicsLoop != "undefined") clearInterval(this.__gamePhysicsLoop);
+    },
+
+    UnPause : function()
+    {
+        if(this.__paused)
+        {
+            InputManager.UpdateEnd();
+        }
+
+        //Reset any previous intervals
+        this.Pause();
+
+        this.__paused = false;
+
+        var gameManager = this;
+        this.__gameUpdateLoop = setInterval(function(){gameManager.__Update()}, this.__updateInterval);
+        this.__gamePhysicsLoop = setInterval(function(){gameManager.__PhysicsUpdate()}, this.__physicsInterval);
+    },
+
+    Stop : function()
+    {
+        //Stop loops if they are already going
+        if(typeof this.__gameDrawLoop != "undefined") clearInterval(this.__gameDrawLoop);
+        this.Pause();
     },
 
     __Update : function()
     {
         this.__gameState = "UPDATING";
         this.__UpdateGameObject();
+        InputManager.UpdateEnd();
         this.__gameState = "NONE";
         this.__RemoveFinish();
     },

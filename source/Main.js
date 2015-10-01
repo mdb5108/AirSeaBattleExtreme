@@ -3,7 +3,8 @@ $(document).ready(function(){
     var drawInterval = 33;
     var physicsInterval = 16;
 
-    GameManager.Start(updateInterval, drawInterval, physicsInterval);
+    GameManager.InitializeIntervals(updateInterval, drawInterval, physicsInterval);
+    GameManager.Start();
 
     var background = new GameObject("background-new vision.png", $("#canvas").width()/2, $("#canvas").height()/2, $("#canvas").width(), $("#canvas").height());
 
