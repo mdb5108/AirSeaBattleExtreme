@@ -4,12 +4,10 @@ $(document).ready(function(){
     var physicsInterval = 16;
 
     GameManager.InitializeIntervals(updateInterval, drawInterval, physicsInterval);
+    var background = new GameObject("background-new vision.png", $("#canvas").width()/2, $("#canvas").height()/2, $("#canvas").width(), $("#canvas").height());
     GameManager.Start();
 
-    var background = new GameObject("background-new vision.png", $("#canvas").width()/2, $("#canvas").height()/2, $("#canvas").width(), $("#canvas").height());
 
-    var turret1 = new Player(0, 500, 800, 535);
-    var turret2 = new Player(1, 500, 200, 535);
 
     //Example/test code that shows how to add game objects and remove them from the game
     //manager
