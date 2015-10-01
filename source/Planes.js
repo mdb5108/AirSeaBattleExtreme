@@ -43,11 +43,11 @@ Plane.prototype.Draw = function(canvas2D)
     this.img.src = this.imgPath;
     canvas2D.translate(this.imageOffset.x, this.imageOffset.y);
     if(this.direction == 1)
-		canvas2D.scale(1, 1);
-	else 
-		canvas2D.scale(-1,1);	
-    canvas2D.drawImage(this.img, -this.xScl/2, -this.yScl/2, this.xScl, this.yScl);
-    canvas2D.restore();
+      canvas2D.scale(1, 1);
+  else 
+      canvas2D.scale(-1,1);	
+  canvas2D.drawImage(this.img, -this.xScl/2, -this.yScl/2, this.xScl, this.yScl);
+  canvas2D.restore();
 };
 
 Plane.prototype.OnCollision = function(collider)
@@ -55,6 +55,14 @@ Plane.prototype.OnCollision = function(collider)
     Collidable.prototype.OnCollision(collider);
     if( collider.tag == "Bullet")
     {
+    	if(collider.playerNum == 0)
+    	{
+    		GameManager.__scores[0]++;
+    	}
+    	else
+    	{
+    		GameManager.__scores[1]++;
+    	}
         this.Destroy();
     }
 };

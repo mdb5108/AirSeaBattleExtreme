@@ -17,7 +17,7 @@ Timer.prototype.Update = function(gameTime)
 {
     this.seconds -= gameTime;
     
-    if(Math.floor(this.seconds) <= 0)
+    if(Math.floor(this.seconds) < 0)
     {
         this.seconds = 0;
         clearInterval(this.Timing);

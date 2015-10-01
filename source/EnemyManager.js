@@ -45,9 +45,9 @@ EnemyManager.prototype.Update = function(gametime) {
 	    // current_lane = Math.floor(current_lane) + 
 		// planeobj = new Plane(this.imgPath, 0, this.img.height * current_lane ,new Vec2(100,0));
 		if (Math.random() < 0.5)		
-		planeobj = new Plane(this.imgPath, 0, 50 * current_lane ,new Vec2(100,0),1);
+			planeobj = new Plane(this.imgPath, 0, 50 * current_lane ,new Vec2(100,0),1);
 		else 
-		planeobj = new Plane(this.imgPath,$("#canvas").width(), 50 * current_lane ,new Vec2(-100,0),-1); 
+			planeobj = new Plane(this.imgPath,$("#canvas").width(), 50 * current_lane ,new Vec2(-100,0),-1); 
 		this.planes.push();
 		this.counter = this.time_delay;		
 	}	
