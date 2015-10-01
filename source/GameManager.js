@@ -118,6 +118,7 @@ var GameManager =
         canvas2D.strokeStyle = "black";
         canvas2D.strokeRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
         this.__DrawGameObject(canvas2D);
+        this.__DrawPause(canvas2D);
         this.__gameManagerState = "NONE";
         this.__RemoveFinish();
     },
@@ -218,6 +219,13 @@ var GameManager =
         for(var i = 0; i < this.__gameObjects.length; i++)
         {
             this.__gameObjects[i].Draw(canvas2D);
+        }
+    },
+    __DrawPause : function(canvas2D)
+    {
+        for(var i = 0; i < this.__pauseObjects.length; i++)
+        {
+            this.__pauseObjects[i].Draw(canvas2D);
         }
     },
     __UpdatePause : function()
