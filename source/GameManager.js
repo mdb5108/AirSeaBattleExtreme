@@ -19,7 +19,13 @@ var GameManager =
     __gamePhysicsLoop : null,
 
     __paused : false,
-    __gameState : "NONE",
+    GAME_STATE : {
+        PLAYING: 0,
+        EXIT: 1,
+    },
+    __GAME_STATES : [new GamePlayState(), new GameExitState()],
+    __gameState : undefined,
+    __gameManagerState : "NONE",
 
     CANVAS_WIDTH : $("#canvas").width(),
     CANVAS_HEIGHT : $("#canvas").height(),
@@ -45,7 +51,8 @@ var GameManager =
         var gameManager = this;
         var canvas2D = $("#canvas")[0].getContext("2d");
         this.__gameDrawLoop = setInterval(function(){gameManager.__Draw(canvas2D)}, this.__drawInterval);
-        this.UnPause();
+
+        this.ChangeState(this.GAME_STATE.PLAYING);
     },
 
     Pause : function()
@@ -79,18 +86,29 @@ var GameManager =
         this.Pause();
     },
 
+    ChangeState : function(stateEnum)
+    {
+        if(this.__gameState != undefined)
+        {
+            this.__gameState.Leave();
+        }
+
+        this.__gameState = this.__GAME_STATES[stateEnum];
+        this.__gameState.Enter();
+    },
+
     __Update : function()
     {
-        this.__gameState = "UPDATING";
+        this.__gameManagerState = "UPDATING";
         this.__UpdateGameObject();
         InputManager.UpdateEnd();
-        this.__gameState = "NONE";
+        this.__gameManagerState = "NONE";
         this.__RemoveFinish();
     },
 
     __Draw : function(canvas2D)
     {
-        this.__gameState = "DRAWING";
+        this.__gameManagerState = "DRAWING";
         //Draw Canvas border
         canvas2D.fillStyle = "white";
         canvas2D.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
@@ -98,15 +116,15 @@ var GameManager =
         canvas2D.strokeRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 
         this.__DrawGameObject(canvas2D);
-        this.__gameState = "NONE";
+        this.__gameManagerState = "NONE";
         this.__RemoveFinish();
     },
 
     __PhysicsUpdate : function()
     {
-        this.__gameState = "PHYSICS";
+        this.__gameManagerState = "PHYSICS";
         this.__UpdateCollidable();
-        this.__gameState = "NONE";
+        this.__gameManagerState = "NONE";
         this.__RemoveFinish();
     },
 
@@ -121,7 +139,7 @@ var GameManager =
 
     RemoveGameObject : function(gameObject)
     {
-        if(this.__gameState == "UPDATING" || this.__gameState == "DRAWING")
+        if(this.__gameManagerState == "UPDATING" || this.__gameManagerState == "DRAWING")
         {
             this.__gameObjectsToRemove.push(gameObject);
         }
@@ -143,7 +161,7 @@ var GameManager =
     },
     RemoveCollidable : function(collidable)
     {
-        if(this.__gameState == "PHYSICS")
+        if(this.__gameManagerState == "PHYSICS")
         {
             this.__collidablesToRemove.push(collidable);
         }
