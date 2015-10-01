@@ -2,8 +2,7 @@ function Bullet(imgPath, velocity, x, y)
 {
 	Collidable.call(this, "Bullet", imgPath, {x:x, y:y}, 10, 10);
 	this.visible = false;
-	this.velocity = velocity;
-	//this.collider = 
+	this.velocity = velocity;	
 };
 
 Bullet.prototype = Object.create(Collidable.prototype);
