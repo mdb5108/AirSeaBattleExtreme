@@ -23,6 +23,10 @@ function Player(playerNum, x, y)
     this.barrel = new GameObject("turret_a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
     this.barrel.angle = 0;
     this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET_TO_BASE});
+
+    this.powerups = ["spreadshot", "rapidfire", "waveshot", "ultimatelaser"];
+    this.activepowerup = true;
+    this.curpowerup = this.powerups[0];
 };
 
 Player.prototype = Object.create(GameObject.prototype);
@@ -46,10 +50,41 @@ Player.prototype.Update = function(gameTime)
     if(InputManager.getFire(this.playerNum) && this.canFire)
     {
         var facing = this.GetFacing();
-        var startPosition = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET_TO_BASE+this.BARREL_OFFSET_TO_TIP, facing));
+        var leftPath = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET_TO_BASE+this.BARREL_OFFSET_TO_TIP, {x:Math.cos(-Math.PI/4 - Math.PI/2), y:Math.sin(-Math.PI/4 - Math.PI/2)}));
+        var midPath = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET_TO_BASE+this.BARREL_OFFSET_TO_TIP, facing));
+        var rightPath = VectorAdd({x:this.barrel.x,y:this.barrel.y}, VectorMultiply(this.BARREL_OFFSET_TO_BASE+this.BARREL_OFFSET_TO_TIP, {x:Math.cos(Math.PI/4 - Math.PI/2), y:Math.sin(Math.PI/4 - Math.PI/2)}));
+
         var velocity = VectorMultiply(this.BULLET_SPEED,facing);
-        this.bullet = new Bullet("tempshot.png", this.playerNum, velocity, startPosition.x, startPosition.y);
-        this.canFire = false;
+
+        leftPath.x += Math.cos(-Math.PI/4 - Math.PI/2) - 100;
+        leftPath.y += Math.sin(-Math.PI/4 - Math.PI/2);
+        
+        midPath.x += Math.cos(this.barrel.angle - Math.PI/2);
+        midPath.y += Math.sin(this.barrel.angle - Math.PI/2);
+
+        rightPath.x += Math.cos(Math.PI/4 - Math.PI/2) + 100;
+        rightPath.y += Math.sin(Math.PI/4 - Math.PI/2);
+
+        if(this.activepowerup)
+        {
+            if(this.curpowerup == this.powerups[0])
+            {
+                this.leftbullet = new Bullet("bullet.png", this.playerNum, -Math.PI/4, velocity, leftPath.x, leftPath.y);
+                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, velocity, midPath.x, midPath.y);
+                this.rightbullet = new Bullet("bullet.png", this.playerNum, Math.PI/4, velocity, rightPath.x, rightPath.y);
+                this.canFire = false;
+            }
+            else if(this.curpowerup == this.powerups[1])
+            {
+                velocity = VectorMultiply(2, velocity);
+                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, velocity, midPath.x, midPath.y);
+            }
+        }
+        else
+        {
+            this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, velocity, midPath.x += Math.cos(this.barrel.angle - Math.PI/2), midPath.y += Math.sin(this.barrel.angle - Math.PI/2));
+            this.canFire = false;
+        }
     }
 
     if(InputManager.getLeft(this.playerNum))
