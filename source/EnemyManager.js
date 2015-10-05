@@ -28,6 +28,7 @@ EnemyManager.prototype.Update = function(gametime) {
     var direction;
     var veloObj;
     var points;
+    var health;
     this.plane_type = 0;
     if ( this.counter <= 0) {
         this.plane_type = Math.floor(Math.random() * (this.plane_type_max - this.plane_type_min + 1)) + this.plane_type_min;
@@ -38,12 +39,14 @@ EnemyManager.prototype.Update = function(gametime) {
                 this.plane_type = 2;
                 veloObj = new Vec2(400,0);
                 points = 10;
+                health = 5;
                 break;
             case 3:
             case 4:
                 this.plane_type = 3;
                 veloObj = new Vec2(400,0);
                 points = 10;
+                health = 5;
                 break;
             case 5:
             case 6:
@@ -51,6 +54,7 @@ EnemyManager.prototype.Update = function(gametime) {
                 this.plane_type = 5;
                 veloObj = new Vec2(200,0);
                 points = 5;
+                health = 3;
                 break;
             case 8:
             case 9:
@@ -58,6 +62,7 @@ EnemyManager.prototype.Update = function(gametime) {
                 this.plane_type = 4;
                 veloObj = new Vec2(200,0);
                 points = 5;
+                health = 3;
                 break;
             case 11:
             case 12:              
@@ -67,6 +72,7 @@ EnemyManager.prototype.Update = function(gametime) {
                 this.plane_type = 0;
                 veloObj = new Vec2(100,0);
                 points = 1;
+                health = 1;
                 break;
             case 16:
             case 17:
@@ -76,14 +82,15 @@ EnemyManager.prototype.Update = function(gametime) {
                 this.plane_type = 1;
                 veloObj = new Vec2(100,0);
                 points = 1;
+                health = 1;
                 break;
         }
         this.img.src = this.imgPath;
         current_lane = Math.floor(Math.random() * (this.max_lanes - this.min_lanes + 1)) + this.min_lanes;
         if (Math.random() < 0.5)
-            this.planes.push(new Plane(this.planes_path[this.plane_type], 0, 50 * current_lane ,veloObj,1,points));
+            this.planes.push(new Plane(this.planes_path[this.plane_type], 0, 50 * current_lane,health,veloObj,1,points));
         else
-            this.planes.push(new Plane(this.planes_path[this.plane_type],GameManager.CANVAS_WIDTH, 50 * current_lane ,this.negateVelocity(veloObj),-1,points));        
+            this.planes.push(new Plane(this.planes_path[this.plane_type],GameManager.CANVAS_WIDTH,50 * current_lane,health,this.negateVelocity(veloObj),-1,points));        
         this.counter = this.time_delay;        
     }    
     else

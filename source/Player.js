@@ -25,7 +25,7 @@ function Player(playerNum, x, y)
     this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET_TO_BASE});
 
     this.powerups = ["spreadshot", "rapidfire", "waveshot", "ultimatelaser"];
-    this.activepowerup = true;
+    this.activepowerup = false;
     this.curpowerup = this.powerups[0];
 };
 
@@ -69,20 +69,29 @@ Player.prototype.Update = function(gameTime)
         {
             if(this.curpowerup == this.powerups[0])
             {
-                this.leftbullet = new Bullet("bullet.png", this.playerNum, -Math.PI/4, velocity, leftPath.x, leftPath.y);
-                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, velocity, midPath.x, midPath.y);
-                this.rightbullet = new Bullet("bullet.png", this.playerNum, Math.PI/4, velocity, rightPath.x, rightPath.y);
+                this.leftbullet = new Bullet("bullet.png", this.playerNum, -Math.PI/4, 1, velocity, leftPath.x, leftPath.y, 10, 10);
+                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, midPath.x, midPath.y, 10, 10);
+                this.rightbullet = new Bullet("bullet.png", this.playerNum, Math.PI/4, 1, velocity, rightPath.x, rightPath.y, 10, 10);
                 this.canFire = false;
             }
             else if(this.curpowerup == this.powerups[1])
             {
                 velocity = VectorMultiply(2, velocity);
-                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, velocity, midPath.x, midPath.y);
+                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, midPath.x, midPath.y, 10, 10);
+            }
+            else if(this.curpowerup == this.powerups[2])
+            {
+                this.midbullet = new Bullet("laser light-1.png", this.playerNum, this.barrel.angle, 2, velocity, midPath.x, midPath.y, 50, 50);
+                this.canFire = false;
+            }
+            else if(this.curpowerup == this.powerups[3])
+            {
+                this.midbullet = new Bullet("laser-red sprites.png", this.playerNum, this.barrel.angle, 5, velocity, midPath.x, midPath.y, 100, 100);
             }
         }
         else
         {
-            this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, velocity, midPath.x += Math.cos(this.barrel.angle - Math.PI/2), midPath.y += Math.sin(this.barrel.angle - Math.PI/2));
+            this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, midPath.x, midPath.y, 10, 10);
             this.canFire = false;
         }
     }

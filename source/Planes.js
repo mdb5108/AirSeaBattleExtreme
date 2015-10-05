@@ -1,12 +1,13 @@
 Plane.prototype = Object.create(Collidable.prototype);
 
-function Plane(imgPath, x, y, velocity,direction,points)
+function Plane(imgPath, x, y, health, velocity,direction,points)
 {   
     Collidable.call(this, "Plane", imgPath, {x:x, y:y}, 100, 50);
     this.visible = true;
     this.imgPath = imgPath;
     this.x = x;
     this.y = y;
+    this.health = health;
     this.velocity = velocity;
     this.direction = direction;
     this.points = points;
@@ -45,16 +46,21 @@ Plane.prototype.OnCollision = function(collider)
     Collidable.prototype.OnCollision(collider);
     if( collider.tag == "Bullet")
     {
-    	if(collider.playerNum == 0)
-    	{
-    		GameManager.__scores[0] += this.points;
-    	}
-    	else
-    	{
-    		GameManager.__scores[1] += this.points;
-    	}
-        this.is_dead = true;
-        this.Destroy();
+        this.health -= collider.power;
+        if(this.health <= 0)
+        {
+            this.is_dead = true;
+            this.Destroy();
+            
+            if(collider.playerNum == 0)
+            {
+                GameManager.__scores[0] += this.points;
+            }
+            else
+            {
+                GameManager.__scores[1] += this.points;
+            }
+        }
     }
 };
 
