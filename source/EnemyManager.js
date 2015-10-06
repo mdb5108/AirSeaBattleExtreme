@@ -12,7 +12,7 @@ function EnemyManager()
     GameObject.call(this, "", 0,0,200,200);
     this.planes = [];
     this.imgPath = "airplane1.png";
-    this.time_delay = .05;
+    this.time_delay = .025;
     this.counter = this.time_delay;
     this.min_lanes = 1;
     this.max_lanes = 7;
