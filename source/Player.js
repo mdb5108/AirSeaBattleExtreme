@@ -1,13 +1,5 @@
 function Player(playerNum, x, y)
 {
-    POWER_UPS = {
-        NORMAL: 0,
-        SPREADSHOT: 1,
-        RAPID_FIRE: 2,
-        WAVESHOT: 3,
-        LASER: 4,
-    };
-
     this.BARREL_ROTATE_MAX = Math.PI/4;
     this.BARREL_ROTATE_MIN = -Math.PI/4;
     this.BARREL_ROTATIONS = [-Math.PI/4, -Math.PI/8, 0, Math.PI/8, Math.PI/4];
@@ -42,12 +34,45 @@ function Player(playerNum, x, y)
     this.barrel.angle = 0;
     this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET_TO_BASE});
 
-    this.ChangePowerUp(POWER_UPS.NORMAL);
+    this.ChangePowerUp(Player.prototype.POWER_UPS.NORMAL);
 };
 
 Player.prototype = Object.create(GameObject.prototype);
 
 Player.prototype.constructor = Player;
+
+Player.prototype.POWER_UP_SIZE = 4;
+Player.prototype.POWER_UPS = {
+    NORMAL: 0,
+    SPREADSHOT: 1,
+    RAPID_FIRE: 2,
+    WAVESHOT: 3,
+    LASER: 4,
+};
+Player.prototype.GetRandomPowerup = function()
+{
+    var powerupIndex = Math.floor(Math.random()*Player.prototype.POWER_UP_SIZE);
+    var powerup;
+    switch(powerupIndex)
+    {
+        case 0:
+            powerup = Player.prototype.POWER_UPS.SPREADSHOT;
+            break;
+        case 1:
+            powerup = Player.prototype.POWER_UPS.RAPID_FIRE;
+            break;
+        case 2:
+            powerup = Player.prototype.POWER_UPS.WAVESHOT;
+            break;
+        case 3:
+            powerup = Player.prototype.POWER_UPS.LASER;
+            break;
+    }
+
+    return powerup;
+};
+
+
 
 Player.prototype.Update = function(gameTime)
 {
@@ -79,37 +104,37 @@ Player.prototype.Update = function(gameTime)
 
         switch(this.curpowerup)
         {
-            case POWER_UPS.SPREADSHOT:
+            case Player.prototype.POWER_UPS.SPREADSHOT:
                 var spreadOffset = -(this.SPREAD_SHOT_SPREAD*Math.floor(this.SPREAD_COUNT/2));
                 for(var i = 0; i < this.SPREAD_COUNT; i++)
                 {
                     var bulletAngle = spreadOffset + (this.barrel.angle - (Math.PI/2) + this.SPREAD_SHOT_SPREAD*i);
                     var spreadVelocity = VectorMultiply(this.BULLET_SPEED, VectorFromAngle(bulletAngle));
-                    new Bullet("bullet.png", this.playerNum, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                    new Bullet("bullet.png", this, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
                 }
                 break;
-            case POWER_UPS.RAPID_FIRE:
+            case Player.prototype.POWER_UPS.RAPID_FIRE:
                 velocity = VectorMultiply(2, velocity);
-                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                this.midbullet = new Bullet("bullet.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
                 break;
-            case POWER_UPS.WAVESHOT:
-                this.midbullet = new WaveBullet(this.playerNum, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y);
+            case Player.prototype.POWER_UPS.WAVESHOT:
+                this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y);
                 break;
-            case POWER_UPS.LASER:
+            case Player.prototype.POWER_UPS.LASER:
             default:
-                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                this.midbullet = new Bullet("bullet.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
                 break;
         }
         this.canFire = false;
     }
 
-    if(InputManager.getDown(this.playerNum) && this.curpowerup == POWER_UPS.LASER)
+    if(InputManager.getDown(this.playerNum) && this.curpowerup == Player.prototype.POWER_UPS.LASER)
     {
         this.laserActive = true;
         if(this.laser != undefined)
             this.laser.Destroy();
         this.curLaserTime = this.LASER_TIME;
-        this.laser = new Laser(this.playerNum, this.barrel.angle, 5, this.x, this.y+this.BARREL_OFFSET_TO_BASE);
+        this.laser = new Laser(this, this.barrel.angle, 5, this.x, this.y+this.BARREL_OFFSET_TO_BASE);
     }
 
     if(InputManager.getLeft(this.playerNum))
@@ -155,7 +180,7 @@ Player.prototype.ChangePowerUp = function(powerup)
     this.curpowerup = powerup;
     switch(this.curpowerup)
     {
-        case POWER_UPS.RAPID_FIRE:
+        case Player.prototype.POWER_UPS.RAPID_FIRE:
             this.bulletFireDelay = this.RAPID_BULLET_DELAY;
             break;
     }
@@ -163,7 +188,7 @@ Player.prototype.ChangePowerUp = function(powerup)
 
 Player.prototype.UpdateLaserDelay = function(gameTime)
 {
-    if(this.laserActive && this.curpowerup == POWER_UPS.LASER)
+    if(this.laserActive && this.curpowerup == Player.prototype.POWER_UPS.LASER)
     {
         this.laser.angle = this.barrel.angle;
         this.curLaserTime -= gameTime;
@@ -171,7 +196,7 @@ Player.prototype.UpdateLaserDelay = function(gameTime)
         {
             this.laser.Destroy();
             this.laserActive = false;
-            this.ChangePowerUp(POWER_UPS.NORMAL);
+            this.ChangePowerUp(Player.prototype.POWER_UPS.NORMAL);
         }
     }
 };

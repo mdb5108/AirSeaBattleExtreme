@@ -1,6 +1,6 @@
-function WaveBullet(playerNum, angle, power, speed, direction, x, y)
+function WaveBullet(player, angle, power, speed, direction, x, y)
 {
-    Bullet.call(this, "Bullet.png", playerNum, angle, power, {x:0, y:0}, x, y, 10, 10);
+    Bullet.call(this, "Bullet.png", player, angle, power, {x:0, y:0}, x, y, 10, 10);
     this.originalX = x;
     this.originalY = y;
     this.originalAngle = angle;

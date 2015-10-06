@@ -66,7 +66,7 @@ Plane.prototype.OnCollision = function(collider)
             this.Destroy();
             new Explosion(this.x, this.y, this.WIDTH, this.HEIGHT);
          
-            if(collider.playerNum == 0)
+            if(collider.player.playerNum == 0)
             {
                 GameManager.__scores[0] += this.points;
             }
