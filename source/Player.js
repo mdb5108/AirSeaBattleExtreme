@@ -17,6 +17,7 @@ function Player(playerNum, x, y)
     this.BULLET_SPEED = 500;
     this.BULLET_NORMAL_DELAY = .2;
     this.RAPID_BULLET_DELAY = .175;
+    this.WAVE_BULLET_DELAY = .5;
     this.bulletFireDelay = this.BULLET_NORMAL_DELAY;
 
     this.SPREAD_COUNT = 3;
@@ -92,7 +93,8 @@ Player.prototype.Update = function(gameTime)
                 this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
                 break;
             case POWER_UPS.WAVESHOT:
-                this.midbullet = new WaveBullet(this.playerNum, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y);
+                this.midbullet = new WaveBullet(this.playerNum, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, true);
+                this.midbullet = new WaveBullet(this.playerNum, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, false);
                 break;
             case POWER_UPS.LASER:
             default:
@@ -156,6 +158,9 @@ Player.prototype.ChangePowerUp = function(powerup)
     {
         case POWER_UPS.RAPID_FIRE:
             this.bulletFireDelay = this.RAPID_BULLET_DELAY;
+            break;
+        case POWER_UPS.WAVESHOT:
+            this.bulletFireDelay = this.WAVE_BULLET_DELAY;
             break;
     }
 };
