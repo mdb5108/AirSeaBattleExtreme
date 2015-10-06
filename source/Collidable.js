@@ -11,6 +11,31 @@ function Collidable(tag, imgPath, initialPosition, width, height)
 }
 Collidable.prototype = Object.create(GameObject.prototype);
 Collidable.prototype.constructor = Collidable;
+
+//Collidable.prototype.Draw = function(canvas2D)
+//{
+//    GameObject.prototype.Draw.call(this, canvas2D);
+//
+//    //Debug View
+//    var polygon = this.GetCollider();
+//    if(polygon.points.length > 0)
+//    {
+//        canvas2D.save();
+//        canvas2D.fillStyle = '#f00';
+//        canvas2D.beginPath();
+//        var point = polygon.points[0];
+//        canvas2D.moveTo(point.x, point.y);
+//        for(var i = 1; i < polygon.points.length; i++)
+//        {
+//            point = polygon.points[i];
+//            canvas2D.lineTo(point.x, point.y);
+//        }
+//        canvas2D.closePath();
+//        canvas2D.fill();
+//        canvas2D.restore();
+//    }
+//}
+
 //Define object functions outside like this and attach to the prototype so we can
 //reference base functions in derived objects (otherwise they are overriden with no way
 //to reference.
