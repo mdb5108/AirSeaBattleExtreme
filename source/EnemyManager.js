@@ -42,14 +42,14 @@ EnemyManager.prototype.Update = function(gametime) {
                 this.plane_type = 2;
                 veloObj = new Vec2(400,0);
                 points = 10;
-                health = 5;
+                health = 1;
                 break;
             case 3:
             case 4:
                 this.plane_type = 3;
                 veloObj = new Vec2(400,0);
                 points = 10;
-                health = 5;
+                health = 1;
                 break;
             case 5:
             case 6:
@@ -57,7 +57,7 @@ EnemyManager.prototype.Update = function(gametime) {
                 this.plane_type = 5;
                 veloObj = new Vec2(200,0);
                 points = 5;
-                health = 3;
+                health = 2;
                 break;
             case 8:
             case 9:
@@ -65,7 +65,7 @@ EnemyManager.prototype.Update = function(gametime) {
                 this.plane_type = 4;
                 veloObj = new Vec2(200,0);
                 points = 5;
-                health = 3;
+                health = 2;
                 break;
             case 11:
             case 12:              
