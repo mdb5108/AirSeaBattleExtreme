@@ -1,6 +1,15 @@
-#timerCanvas
-{
-	position: absolute;
-	margin-top: 32%;
-	margin-left: 22%;
+body{
+    overflow-y: scroll;
+    padding: 0;
+    margin: 0;
+    font-family: eddie;
+    font-size: 22px;
+    width: 960px;
+    margin: 60px auto;
+    text-align: center;
+}
+
+@font-face{
+    font-family: "eddie";
+    src: local('eddie.ttf') format('opentype');    
 }

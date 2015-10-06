@@ -125,9 +125,10 @@ var GameManager =
         this.__DrawGameObject(canvas2D);
         this.__DrawPause(canvas2D);
 
-        canvas2D.font = "20pt Arial";
-        canvas2D.fillText("Player1", 275, 520);
-        canvas2D.fillText("Player2", 650, 520);
+        canvas2D.font = "20pt eddie";    
+        // Commented below texts to display images instead     
+        // canvas2D.fillText("Player1", 275, 520);
+        // canvas2D.fillText("Player2", 650, 520);
 
         canvas2D.fillText(this.__scores[0], 312, 550);
         canvas2D.fillText(this.__scores[1], 685, 550);
