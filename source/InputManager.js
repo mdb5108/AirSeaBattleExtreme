@@ -1,18 +1,30 @@
 var InputManager = {
+    __DOWN: [false, false],
+    __DOWN_REDO: [true, true],
     __LEFT: [false, false],
     __LEFT_REDO: [true, true],
     __RIGHT: [false, false],
     __RIGHT_REDO: [true, true],
     __FIRE: [false, false],
 
+    __blockDownTimeout: undefined,
     __blockLeftTimeout: undefined,
     __blockRightTimeout: undefined,
     __blockFireTimeout: undefined,
 
+    __blockDown: false,
     __blockLeft: false,
     __blockRight: false,
     __blockFire: false,
 
+    __setDown: function(number, value)
+    {
+        if(this.__DOWN_REDO[number])
+        {
+            this.__DOWN_REDO[number] = false;
+            this.__DOWN[number] = true;
+        }
+    },
     __setLeft: function(number, value)
     {
         if(this.__LEFT_REDO[number])
@@ -30,6 +42,10 @@ var InputManager = {
         }
     },
 
+    __setDownUnPressed: function(number)
+    {
+        this.__DOWN_REDO[number] = true;
+    },
     __setLeftUnPressed: function(number)
     {
         this.__LEFT_REDO[number] = true;
@@ -39,6 +55,12 @@ var InputManager = {
         this.__RIGHT_REDO[number] = true;
     },
 
+    getDown: function(number)
+    {
+        if(!this.__blockDown)
+            return this.__DOWN[number];
+        return false;
+    },
     getLeft: function(number)
     {
         if(!this.__blockLeft)
@@ -58,6 +80,16 @@ var InputManager = {
         return false;
     },
 
+    blockDown: function(timeout)
+    {
+        this.__blockDown = true;
+        var inputManager = this;
+        this.__blockDownTimeout = setTimeout(function()
+        {
+            inputManager.__blockDown = false;
+        },
+        timeout);;
+    },
     blockLeft: function(timeout)
     {
         this.__blockLeft = true;
@@ -104,6 +136,9 @@ var InputManager = {
             case 68: // d
                 this.__setRight(0, true);
                 break;
+            case 83: // s
+                this.__setDown(0, true);
+                break;
 
             //Player 2
             case 13: // enter
@@ -114,6 +149,9 @@ var InputManager = {
                 break;
             case 39: // right arrow
                 this.__setRight(1, true);
+                break;
+            case 40: // down arrow
+                this.__setDown(1, true);
                 break;
         }
     },
@@ -132,6 +170,9 @@ var InputManager = {
             case 68: // d
                 this.__setRightUnPressed(0);
                 break;
+            case 83: // s
+                this.__setDownUnPressed(0);
+                break;
 
             //Player 2
             case 13: // spacebar
@@ -143,10 +184,14 @@ var InputManager = {
             case 39: // right arrow
                 this.__setRightUnPressed(1);
                 break;
+            case 40: // down arrow
+                this.__setDownUnPressed(1);
+                break;
         }
     },
     UpdateEnd: function(number)
     {
+        this.__DOWN = [false, false];
         this.__LEFT = [false, false];
         this.__RIGHT = [false, false];
     }
