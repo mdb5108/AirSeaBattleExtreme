@@ -1,10 +1,11 @@
 function Player(playerNum, x, y)
 {
     POWER_UPS = {
-        SPREADSHOT: 0,
-        RAPID_FIRE: 1,
-        WAVESHOT: 2,
-        LASER: 3,
+        NORMAL: 0,
+        SPREADSHOT: 1,
+        RAPID_FIRE: 2,
+        WAVESHOT: 3,
+        LASER: 4,
     };
 
     this.BARREL_ROTATE_MAX = Math.PI/4;
@@ -21,6 +22,10 @@ function Player(playerNum, x, y)
     this.SPREAD_SHOT_SPREAD = Math.PI/4;
 
     this.RAPID_BULLET_DELAY = .5;
+
+    this.LASER_TIME = .5;
+    this.curLaserTime = 0;
+    this.laserActive = false;
 
     this.barrelRotation = 2;
 
@@ -39,12 +44,11 @@ function Player(playerNum, x, y)
 
     if(this.playerNum == 0)
     {
-        this.activepowerup = true;
-        this.ChangePowerUp(POWER_UPS.WAVESHOT)
+        this.ChangePowerUp(POWER_UPS.LASER)
     }
     else
     {
-        this.activepowerup = false;
+        this.ChangePowerUp(POWER_UPS.NORMAL);
     }
 };
 
@@ -55,6 +59,8 @@ Player.prototype.constructor = Player;
 Player.prototype.Update = function(gameTime)
 {
     GameObject.prototype.Update.call(this, gameTime);
+
+    this.UpdateLaserDelay(gameTime);
 
     if(!this.canFire)
     {
@@ -78,36 +84,39 @@ Player.prototype.Update = function(gameTime)
         bulletPosition.x += Math.cos(this.barrel.angle - Math.PI/2);
         bulletPosition.y += Math.sin(this.barrel.angle - Math.PI/2);
 
-        if(this.activepowerup)
+        switch(this.curpowerup)
         {
-            switch(this.curpowerup)
-            {
-                case POWER_UPS.SPREADSHOT:
-                    var spreadOffset = -(this.SPREAD_SHOT_SPREAD*Math.floor(this.SPREAD_COUNT/2));
-                    for(var i = 0; i < this.SPREAD_COUNT; i++)
-                    {
-                        var bulletAngle = spreadOffset + (this.barrel.angle - (Math.PI/2) + this.SPREAD_SHOT_SPREAD*i);
-                        var spreadVelocity = VectorMultiply(this.BULLET_SPEED, VectorFromAngle(bulletAngle));
-                        new Bullet("bullet.png", this.playerNum, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
-                    }
-                    break;
-                case POWER_UPS.RAPID_FIRE:
-                    velocity = VectorMultiply(2, velocity);
-                    this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
-                    break;
-                case POWER_UPS.WAVESHOT:
-                    this.midbullet = new WaveBullet(this.playerNum, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y);
-                    break;
-                case POWER_UPS.LASER:
-                    this.midbullet = new Bullet("laser-red sprites.png", this.playerNum, this.barrel.angle, 5, velocity, bulletPosition.x, bulletPosition.y, 100, 100);
-                    break;
-            }
-        }
-        else
-        {
-            this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+            case POWER_UPS.SPREADSHOT:
+                var spreadOffset = -(this.SPREAD_SHOT_SPREAD*Math.floor(this.SPREAD_COUNT/2));
+                for(var i = 0; i < this.SPREAD_COUNT; i++)
+                {
+                    var bulletAngle = spreadOffset + (this.barrel.angle - (Math.PI/2) + this.SPREAD_SHOT_SPREAD*i);
+                    var spreadVelocity = VectorMultiply(this.BULLET_SPEED, VectorFromAngle(bulletAngle));
+                    new Bullet("bullet.png", this.playerNum, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                }
+                break;
+            case POWER_UPS.RAPID_FIRE:
+                velocity = VectorMultiply(2, velocity);
+                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                break;
+            case POWER_UPS.WAVESHOT:
+                this.midbullet = new WaveBullet(this.playerNum, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y);
+                break;
+            case POWER_UPS.LASER:
+            default:
+                this.midbullet = new Bullet("bullet.png", this.playerNum, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                break;
         }
         this.canFire = false;
+    }
+
+    if(InputManager.getDown(this.playerNum) && this.curpowerup == POWER_UPS.LASER)
+    {
+        this.laserActive = true;
+        if(this.laser != undefined)
+            this.laser.Destroy();
+        this.curLaserTime = this.LASER_TIME;
+        this.laser = new Laser(this.playerNum, this.barrel.angle, 5, this.x, this.y+this.BARREL_OFFSET_TO_BASE);
     }
 
     if(InputManager.getLeft(this.playerNum))
@@ -133,6 +142,8 @@ Player.prototype.Destroy = function()
 {
     GameObject.prototype.Destroy.call(this);
     this.barrel.Destroy();
+    if(this.laser != undefined)
+        this.laser.Destroy();
 };
 
 Player.prototype.Draw = function(canvas2D)
@@ -143,6 +154,10 @@ Player.prototype.Draw = function(canvas2D)
 Player.prototype.ChangePowerUp = function(powerup)
 {
     //Set to normalative state
+    this.laserActive = false;
+    this.curLaserTime = 0;
+    if(this.laser != undefined)
+        this.laser.Destroy();
     this.bulletFireDelay = this.BULLET_NORMAL_DELAY;
     this.curpowerup = powerup;
     switch(this.curpowerup)
@@ -150,6 +165,21 @@ Player.prototype.ChangePowerUp = function(powerup)
         case POWER_UPS.RAPID_FIRE:
             this.bulletFireDelay = this.RAPID_BULLET_DELAY;
             break;
+    }
+};
+
+Player.prototype.UpdateLaserDelay = function(gameTime)
+{
+    if(this.laserActive && this.curpowerup == POWER_UPS.LASER)
+    {
+        this.laser.angle = this.barrel.angle;
+        this.curLaserTime -= gameTime;
+        if(this.curLaserTime <= 0)
+        {
+            this.laser.Destroy();
+            this.laserActive = false;
+            this.ChangePowerUp(POWER_UPS.NORMAL);
+        }
     }
 };
 
