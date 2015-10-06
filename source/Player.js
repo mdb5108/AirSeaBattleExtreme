@@ -18,6 +18,7 @@ function Player(playerNum, x, y)
     this.BULLET_NORMAL_DELAY = .2;
     this.RAPID_BULLET_DELAY = .175;
     this.WAVE_BULLET_DELAY = .5;
+    this.SPREAD_BULLET_DELAY = .5;
     this.bulletFireDelay = this.BULLET_NORMAL_DELAY;
 
     this.SPREAD_COUNT = 3;
@@ -161,6 +162,9 @@ Player.prototype.ChangePowerUp = function(powerup)
             break;
         case POWER_UPS.WAVESHOT:
             this.bulletFireDelay = this.WAVE_BULLET_DELAY;
+            break;
+        case POWER_UPS.SPREADSHOT:
+            this.bulletFireDelay = this.SPREAD_BULLET_DELAY;
             break;
     }
 };
