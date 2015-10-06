@@ -9,6 +9,9 @@ function Bullet(imgPath, playerNum, angle, power, velocity, x, y, xScl, yScl)
 
     Bullet.bullets.push(this);
     Bullet.__clearing = false;
+	this.sound_path = "Single Shot_01.mp3";    	
+    this.sound_loop = false;
+
 };
 
 Bullet.bullets = [];
