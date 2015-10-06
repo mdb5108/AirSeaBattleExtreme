@@ -52,7 +52,6 @@ TextBanner.prototype.Draw = function(canvas2D)
     if(this.visible)
     {
         canvas2D.save();
-		//canvas2D.font = this.fontSize+"px Ariel";
         canvas2D.font = this.fontSize+"px eddie";
         canvas2D.textAlign = "center";
         canvas2D.fillText(this.text, GameManager.CANVAS_WIDTH/2, GameManager.CANVAS_HEIGHT/2 + this.yoffset);

@@ -1,6 +1,6 @@
 Plane.prototype = Object.create(Collidable.prototype);
 
-function Plane(imgPath, x, y, health, velocity,direction,points)
+function Plane(imgPath, x, y, health, velocity,direction,points,sound_path)
 {   
     Collidable.call(this, "Plane", imgPath, {x:x, y:y}, 100, 50);
     this.visible = true;
@@ -11,7 +11,9 @@ function Plane(imgPath, x, y, health, velocity,direction,points)
     this.velocity = velocity;
     this.direction = direction;
     this.points = points;
+    this.sound_loop = false;
     this.is_dead = false;
+    this.sound_path = sound_path;
 };
 
 
@@ -21,6 +23,7 @@ Plane.prototype.Update = function(gametime) {
     this.y += this.velocity.y * gametime;
     if(!(canvasRect.Contains({x:this.x, y:this.y})))
     {
+        this.PauseSound();
         this.is_dead = true;
         this.Destroy();
     }
@@ -35,10 +38,14 @@ Plane.prototype.Draw = function(canvas2D)
     canvas2D.translate(this.imageOffset.x, this.imageOffset.y);
     if(this.direction == 1)
       canvas2D.scale(1, 1);
-  else 
+    else 
       canvas2D.scale(-1,1);
-  canvas2D.drawImage(this.img, -this.xScl/2, -this.yScl/2, this.xScl, this.yScl);
-  canvas2D.restore();
+    canvas2D.drawImage(this.img, -this.xScl/2, -this.yScl/2, this.xScl, this.yScl);
+    canvas2D.restore();
+    if(this.sound_path != "no_sound")
+        this.PlaySound();
+    this.sound_path = "no_sound";
+
 };
 
 Plane.prototype.OnCollision = function(collider)
@@ -49,9 +56,13 @@ Plane.prototype.OnCollision = function(collider)
         this.health -= collider.power;
         if(this.health <= 0)
         {
-            this.is_dead = true;
+            this.is_dead = true;            
+            this.PauseSound();
+            this.sound_loop = false;
+            this.sound_path = "Explosion_01.mp3";
+            this.PlaySound();                  
             this.Destroy();
-            
+         
             if(collider.playerNum == 0)
             {
                 GameManager.__scores[0] += this.points;
