@@ -41,3 +41,7 @@ function VectorAdd(vector1, vector2)
     return {x:vector1.x+vector2.x, y:vector1.y+vector2.y};
 }
 
+function VectorFromAngle(angle)
+{
+    return {x:Math.cos(angle), y:Math.sin(angle)};
+}
