@@ -6,6 +6,8 @@ var GenerateUniqueId = (function()
 
 function Rect(left, top, right, bottom)
 {
+    this.tag = "Rect"
+    this.points = [{x:left, y:top}, {x:right, y:top}, {x:right, y:bottom}, {x:left, y:bottom}];
     this.left = left;
     this.top = top;
     this.right = right;
@@ -18,10 +20,17 @@ function Rect(left, top, right, bottom)
 
     this.Intersects = function(r2)
     {
-        return !(  this.left > r2.right
-                || this.right < r2.left
-                || this.top > r2.bottom
-                || this.bottom < r2.top);
+        if(r2.tag == "Rect")
+        {
+            return !(  this.left > r2.right
+                    || this.right < r2.left
+                    || this.top > r2.bottom
+                    || this.bottom < r2.top);
+        }
+        else
+        {
+            return r2.Intersects(this);
+        }
     }
 
     this.Contains = function(p)
@@ -33,6 +42,7 @@ function Rect(left, top, right, bottom)
 
 function Polygon(topLeft, topRight, bottomRight, bottomLeft)
 {
+    this.tag = "Polygon";
 
     this.points = [topLeft, topRight, bottomRight, bottomLeft];
 
