@@ -1,12 +1,24 @@
-function Collidable(tag, imgPath, initialPosition, width, height)
+function Collidable(tag, imgPath, initialPosition, width, height, polygonial)
 {
     GameObject.call(this, imgPath, initialPosition.x, initialPosition.y, width, height);
 
     this.tag = tag;
-    this.relativeCollider = new Polygon({x:- width/2, y:-height/2},
-                                        {x:width/2, y:- height/2},
-                                        {x:width/2, y:height/2},
-                                        {x:-width/2, y:height/2});
+    if(polygonial != undefined && polygonial == true)
+    {
+        this.relativeCollider = new Polygon({x:- width/2, y:-height/2},
+                                            {x:width/2, y:- height/2},
+                                            {x:width/2, y:height/2},
+                                            {x:-width/2, y:height/2});
+        this.polygonial = true;
+    }
+    else
+    {
+        this.relativeCollider = new Rect(- width/2,
+           - height/2,
+           + width/2,
+           + height/2);
+        this.polygonial = false;
+    }
     GameManager.AddCollidable(this);
 }
 Collidable.prototype = Object.create(GameObject.prototype);
@@ -41,7 +53,13 @@ Collidable.prototype.constructor = Collidable;
 //to reference.
 Collidable.prototype.GetCollider = function()
 {
-    return this.relativeCollider.PolygonAtCenter({x:this.imageOffset.x, y:this.imageOffset.y}).PolygonRotated(this.angle).PolygonAtCenter({x:this.x, y:this.y});
+    if(this.polygonial)
+        return this.relativeCollider.PolygonAtCenter({x:this.imageOffset.x, y:this.imageOffset.y}).PolygonRotated(this.angle).PolygonAtCenter({x:this.x, y:this.y});
+    else
+        return new Rect(this.x + this.relativeCollider.left,
+            this.y + this.relativeCollider.top,
+            this.x + this.relativeCollider.right,
+            this.y + this.relativeCollider.bottom);
 }
 Collidable.prototype.OnCollision = function(collider)
 {
