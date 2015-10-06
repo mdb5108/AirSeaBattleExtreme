@@ -15,13 +15,12 @@ function Player(playerNum, x, y)
     this.BARREL_OFFSET_TO_BASE = 25;
     this.BARREL_OFFSET_TO_TIP = 70;
     this.BULLET_SPEED = 500;
-    this.BULLET_NORMAL_DELAY = 1;
+    this.BULLET_NORMAL_DELAY = .2;
+    this.RAPID_BULLET_DELAY = .01;
     this.bulletFireDelay = 1;
 
     this.SPREAD_COUNT = 3;
     this.SPREAD_SHOT_SPREAD = Math.PI/4;
-
-    this.RAPID_BULLET_DELAY = .5;
 
     this.LASER_TIME = .5;
     this.curLaserTime = 0;
