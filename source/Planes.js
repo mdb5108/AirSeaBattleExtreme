@@ -2,7 +2,9 @@ Plane.prototype = Object.create(Collidable.prototype);
 
 function Plane(imgPath, x, y, health, velocity,direction,points,sound_path)
 {   
-    Collidable.call(this, "Plane", imgPath, {x:x, y:y}, 100, 50);
+    this.WIDTH = 100;
+    this.HEIGHT = 50;
+    Collidable.call(this, "Plane", imgPath, {x:x, y:y}, this.WIDTH, this.HEIGHT);
     this.visible = true;
     this.imgPath = imgPath;
     this.x = x;
@@ -62,6 +64,7 @@ Plane.prototype.OnCollision = function(collider)
             this.sound_path = "Explosion_01.mp3";
             this.PlaySound();                  
             this.Destroy();
+            new Explosion(this.x, this.y, this.WIDTH, this.HEIGHT);
          
             if(collider.playerNum == 0)
             {
