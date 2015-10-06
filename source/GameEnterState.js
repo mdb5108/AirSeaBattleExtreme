@@ -34,7 +34,7 @@ GameEnterState.prototype.Enter = function()
     //this.title = new TextBanner("Air Sea Battle", 50, -FONT_HEIGHT);
     //this.subTitle = new TextBanner("EXTREME", 50, 0);
     this.start_img = new GameObject("title.png", $("#canvas").width()/2, $("#canvas").height()/2 - 95, 834,191);
-    this.instruction = new TextBanner("Press FIRE to start", 50, FONT_HEIGHT);
+    this.instruction = new TextBanner("startbutton.png", 50, -250, FONT_HEIGHT);
     this.instruction.SetUpdateDuringPause(true);
     this.instruction.SetFlicker(1.5);
 

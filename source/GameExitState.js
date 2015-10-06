@@ -28,39 +28,29 @@ GameExitState.prototype.ResetProxy = function()
 GameExitState.prototype.Enter = function()
 {
     var RESTART_DELAY = 3000;
-    var winner = "PLAYER ";
-    var winText = "";
+    var textPath = "";
 
     if(GameManager.__scores[0] > GameManager.__scores[1])
     {
-        winner += "1";
+        textPath = "player1win.png";
     }
-    else if(GameManager.__scores[0] == GameManager.__scores[1])
-    {
-        winner = "";
-    }
-    else
-    {
-        winner += "2";
-    }
-
     if(GameManager.__scores[0] == GameManager.__scores[1])
     {
-        winText = "It's a Draw!!";
+        textPath = "itsadraw.png";
     }
-    else
+    if(GameManager.__scores[0] < GameManager.__scores[1])
     {
-        winText = winner + " WINS!!!";
+        textPath = "player2win.png";
     }
 
     GameManager.Pause();
-    this.text = new TextBanner(winText, 50, 0);
+    this.text = new TextBanner(textPath, 50, -180, -80);
     var gameExitState = this;
     this.resetTimeout = setTimeout(function(){
         gameExitState.resetProxy = gameExitState.ResetProxy();
         if(gameExitState.instruction != undefined)
             gameExitState.instruction.Destroy();
-        gameExitState.instruction = new TextBanner("Press FIRE to restart", 50, 50);
+        gameExitState.instruction = new TextBanner("title-press fire to restart.png", -50, -320, 20);
     }, RESTART_DELAY);
 };
 
