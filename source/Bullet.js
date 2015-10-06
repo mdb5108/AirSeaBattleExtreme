@@ -2,7 +2,10 @@ function Bullet(imgPath, velocity, x, y)
 {
 	Collidable.call(this, "Bullet", imgPath, {x:x, y:y}, 10, 10);
 	this.visible = false;
-	this.velocity = velocity;	
+	this.sound_path = "Single Shot_01.mp3";
+    this.velocity = velocity;	
+    this.sound_loop = false;
+
 };
 
 Bullet.prototype = Object.create(Collidable.prototype);
