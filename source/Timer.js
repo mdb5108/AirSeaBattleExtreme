@@ -1,6 +1,6 @@
 function Timer(initSeconds, x, y)
 {
-    GameObject.call(this, x, y);
+    GameObject.call(this, "", x, y, 0, 0);
     var t = this;
     this.x = x;
     this.y = y;
