@@ -42,14 +42,7 @@ function Player(playerNum, x, y)
     this.barrel.angle = 0;
     this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET_TO_BASE});
 
-    if(this.playerNum == 0)
-    {
-        this.ChangePowerUp(POWER_UPS.LASER)
-    }
-    else
-    {
-        this.ChangePowerUp(POWER_UPS.NORMAL);
-    }
+    this.ChangePowerUp(POWER_UPS.NORMAL);
 };
 
 Player.prototype = Object.create(GameObject.prototype);
