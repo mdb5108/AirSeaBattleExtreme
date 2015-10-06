@@ -29,9 +29,18 @@ function Player(playerNum, x, y)
 
     this.playerNum = playerNum;
     this.bullet = null;
-    GameObject.call(this, "turret_b.png", x, y, 105, 150);
     
-    this.barrel = new GameObject("turret_a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
+    if(this.playerNum == 0)
+    {
+        GameObject.call(this, "turret_b.png", x, y, 105, 150);
+        this.barrel = new GameObject("turret_a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
+    }
+    if(this.playerNum == 1)
+    {
+        GameObject.call(this, "turret_2b.png", x, y, 105, 150);
+        this.barrel = new GameObject("turret_2a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
+    }
+
     this.barrel.angle = 0;
     this.barrel.SetImageOffset({x:0, y:-this.BARREL_OFFSET_TO_BASE});
 
