@@ -45,3 +45,8 @@ function VectorFromAngle(angle)
 {
     return {x:Math.cos(angle), y:Math.sin(angle)};
 }
+
+function VectorPerpendicular(vector)
+{
+    return {x:-vector.y, y:vector.x};
+}
