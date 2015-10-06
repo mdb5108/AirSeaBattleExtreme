@@ -1,7 +1,7 @@
-function Bullet(imgPath, playerNum, angle, power, velocity, x, y, xScl, yScl)
+function Bullet(imgPath, player, angle, power, velocity, x, y, xScl, yScl)
 {
 	Collidable.call(this, "Bullet", imgPath, {x:x, y:y}, xScl, yScl);
-    this.playerNum = playerNum;
+    this.player = player;
     this.velocity = velocity;
     this.angle = angle;
     this.power = power;

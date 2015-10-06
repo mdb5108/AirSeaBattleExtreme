@@ -1,4 +1,4 @@
-function Laser(playerNum, angle, power, x, y)
+function Laser(player, angle, power, x, y)
 {
     Collidable.call(this, "Bullet", "laser-red sprites.png", {x:x, y:y}, 83/2, 1200, true);
 
@@ -11,7 +11,7 @@ function Laser(playerNum, angle, power, x, y)
 
     this.SetImageOffset({x:0, y:-this.LASER_OFFSET});
 
-    this.playerNum = playerNum;
+    this.player = player;
     this.angle = angle;
     this.power = power;
 
