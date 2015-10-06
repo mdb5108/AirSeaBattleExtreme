@@ -16,8 +16,8 @@ function Player(playerNum, x, y)
     this.BARREL_OFFSET_TO_TIP = 70;
     this.BULLET_SPEED = 500;
     this.BULLET_NORMAL_DELAY = .2;
-    this.RAPID_BULLET_DELAY = .01;
-    this.bulletFireDelay = 1;
+    this.RAPID_BULLET_DELAY = .175;
+    this.bulletFireDelay = this.BULLET_NORMAL_DELAY;
 
     this.SPREAD_COUNT = 3;
     this.SPREAD_SHOT_SPREAD = Math.PI/4;
