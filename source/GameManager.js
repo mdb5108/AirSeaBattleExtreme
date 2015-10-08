@@ -41,7 +41,6 @@ var GameManager =
 
     GAME_LENGTH: 60,
     __scores : [],
-    __scores : [],    
 
 
     CANVAS_WIDTH : $("#canvas").width(),
@@ -175,11 +174,8 @@ var GameManager =
         // canvas2D.fillText("Player1", 275, 520);
         // canvas2D.fillText("Player2", 650, 520);
 
-        if(this.__gameState == this.__GAME_STATES[1] || this.__gameState == this.__GAME_STATES[2])
-        {
-            canvas2D.fillText(this.__scores[0], 312, 550);
-            canvas2D.fillText(this.__scores[1], 685, 550);
-        }
+        canvas2D.fillText(this.__scores[0], 312, 550);
+        canvas2D.fillText(this.__scores[1], 685, 550);
 
         this.__gameManagerState = "NONE";
         this.__RemoveFinish();
