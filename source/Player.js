@@ -155,7 +155,6 @@ Player.prototype.Update = function(gameTime)
                 case Player.prototype.POWER_UPS.LASER:
                 default:
                     this.midbullet = new Bullet("bullet.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
-                    this.powerSymbol = null;
                     break;
             }
         }
