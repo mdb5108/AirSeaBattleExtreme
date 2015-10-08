@@ -1,6 +1,6 @@
 function Explosion(x, y, xScl, yScl)
 {
-    GameObject.call(this, "sprites-explosion.png", x, y, xScl, yScl);
+    GameObject.call(this, "sprites-explosion2.png", x, y, xScl, yScl);
 
     this.EXPLOSION_DURATION = .5;
     this.EXPLOSION_FRAMES = 12;

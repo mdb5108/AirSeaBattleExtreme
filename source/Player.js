@@ -120,12 +120,12 @@ Player.prototype.Update = function(gameTime)
                 {
                     var bulletAngle = spreadOffset + (this.barrel.angle - (Math.PI/2) + this.SPREAD_SHOT_SPREAD*i);
                     var spreadVelocity = VectorMultiply(this.BULLET_SPEED, VectorFromAngle(bulletAngle));
-                    new Bullet("bullet.png", this, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                    new Bullet("bullet2.png", this, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
                 }
                 break;
             case Player.prototype.POWER_UPS.RAPID_FIRE:
                 velocity = VectorMultiply(2, velocity);
-                this.midbullet = new Bullet("bullet.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                this.midbullet = new Bullet("bullet2.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
                 break;
             case Player.prototype.POWER_UPS.WAVESHOT:
                 this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, true);
@@ -133,7 +133,7 @@ Player.prototype.Update = function(gameTime)
                 break;
             case Player.prototype.POWER_UPS.LASER:
             default:
-                this.midbullet = new Bullet("bullet.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                this.midbullet = new Bullet("bullet2.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
                 break;
         }
         this.canFire = false;
