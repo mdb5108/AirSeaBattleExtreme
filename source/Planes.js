@@ -1,9 +1,17 @@
 Plane.prototype = Object.create(Collidable.prototype);
 
-function Plane(imgPath, x, y, health, velocity,direction,points,sound_path)
+function Plane(imgPath, x, y, health, velocity,direction,points,sound_path, width, height)
 {   
-    this.WIDTH = 100;
-    this.HEIGHT = 50;
+    if(width != undefined)
+        this.WIDTH = width;
+    else
+        this.WIDTH = 100;
+
+    if(height != undefined)
+        this.HEIGHT = height;
+    else
+        this.HEIGHT = 50;
+
     Collidable.call(this, "Plane", imgPath, {x:x, y:y}, this.WIDTH, this.HEIGHT, GameManager.PHYSICS_LAYERS.PLANES);
     this.visible = true;
     this.imgPath = imgPath;

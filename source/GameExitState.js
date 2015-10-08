@@ -27,6 +27,7 @@ GameExitState.prototype.ResetProxy = function()
 
 GameExitState.prototype.Enter = function()
 {
+
     var RESTART_DELAY = 3000;
     var textPath = "";
 
@@ -44,6 +45,15 @@ GameExitState.prototype.Enter = function()
     }
 
     GameManager.Pause();
+
+    var explosion = new Explosion(GameManager.CANVAS_WIDTH/2, GameManager.CANVAS_HEIGHT/2, GameManager.CANVAS_WIDTH, GameManager.CANVAS_HEIGHT);
+    explosion.SetUpdateDuringPause(true);
+
+    explosion.PauseSound();
+    explosion.sound_loop = false;
+    explosion.sound_path = "Explosion_01.mp3";
+    explosion.PlaySound();
+
     this.text = new TextBanner(textPath, 50, -180, -80);
     var gameExitState = this;
     this.resetTimeout = setTimeout(function(){
