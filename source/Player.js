@@ -66,6 +66,7 @@ Player.prototype.POWER_UPS = {
 };
 Player.prototype.GetRandomPowerup = function()
 {
+    return Player.prototype.POWER_UPS.RAPID_FIRE;
     var powerupIndex = Math.floor(Math.random()*Player.prototype.POWER_UP_SIZE);
     var powerup;
     switch(powerupIndex)
@@ -144,7 +145,7 @@ Player.prototype.Update = function(gameTime)
                     break;
                 case Player.prototype.POWER_UPS.RAPID_FIRE:
                     velocity = VectorMultiply(2, velocity);
-                    this.midbullet = new Bullet("rapidshot.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                    this.midbullet = new RapidBullet(this, 1, velocity, bulletPosition.x, bulletPosition.y);
                     break;
                 case Player.prototype.POWER_UPS.WAVESHOT:
                     this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, true);
