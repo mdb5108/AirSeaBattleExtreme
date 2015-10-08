@@ -4,7 +4,7 @@ function Plane(imgPath, x, y, health, velocity,direction,points,sound_path)
 {   
     this.WIDTH = 100;
     this.HEIGHT = 50;
-    Collidable.call(this, "Plane", imgPath, {x:x, y:y}, this.WIDTH, this.HEIGHT);
+    Collidable.call(this, "Plane", imgPath, {x:x, y:y}, this.WIDTH, this.HEIGHT, GameManager.PHYSICS_LAYERS.PLANES);
     this.visible = true;
     this.imgPath = imgPath;
     this.x = x;

@@ -4,6 +4,14 @@ var GameManager =
 {
     __gameTimeMilli : null,
 
+    PHYSICS_LAYERS_COUNT : 3,
+    PHYSICS_LAYERS :
+    {
+        DEFAULT: 0,
+        PLANES: 1,
+        BULLETS: 2,
+    },
+
     __gameObjects : [],
     __collidables : [],
     __pauseObjects : [],
@@ -49,6 +57,14 @@ var GameManager =
     {
         this.__scores[0] = 0;
         this.__scores[1] = 0;
+
+        this.__collidables = [];
+        this.__collidablesToRemove = [];
+        for(var i = 0; i < this.PHYSICS_LAYERS_COUNT; i++)
+        {
+            this.__collidables.push([]);
+            this.__collidablesToRemove.push([]);
+        }
 
         this.Stop();
 
@@ -149,9 +165,9 @@ var GameManager =
     {
         this.__gameObjects.push(gameObject);
     },
-    AddCollidable : function(collidable)
+    AddCollidable : function(collidable, layer)
     {
-        this.__collidables.push(collidable);
+        this.__collidables[layer].push(collidable);
     },
     AddPauseUpdate : function(gameObject)
     {
@@ -165,11 +181,11 @@ var GameManager =
                               this.__gameObjectsToRemove,
                               gameObject);
     },
-    RemoveCollidable : function(collidable)
+    RemoveCollidable : function(collidable, layer)
     {
         this.__RemoveFromList(function(){return GameManager.__gameManagerState == "PHYSICS";},
-                              this.__collidables,
-                              this.__collidablesToRemove,
+                              this.__collidables[layer],
+                              this.__collidablesToRemove[layer],
                               collidable);
     },
     RemovePauseUpdate : function(gameObject)
@@ -210,14 +226,20 @@ var GameManager =
         }
         for(var i = 0; i < this.__collidablesToRemove.length; i++)
         {
-            this.__RemoveListInstant(this.__collidables, this.__collidablesToRemove[i]);
+            for(var j = 0; j < this.__collidablesToRemove[i].length; j++)
+            {
+                this.__RemoveListInstant(this.__collidables[i], this.__collidablesToRemove[i][j]);
+            }
         }
         for(var i = 0; i < this.__pauseObjectsToRemove.length; i++)
         {
             this.__RemoveListInstant(this.__pauseObjects, this.__pauseObjectsToRemove[i]);
         }
         this.__gameObjectsToRemove = [];
-        this.__collidablesToRemove = [];
+        for(var i = 0; i < this.__collidablesToRemove.length; i++)
+        {
+            this.__collidablesToRemove[i] = [];
+        }
         this.__pauseObjectsToRemove = [];
     },
 
@@ -255,10 +277,16 @@ var GameManager =
         {
             for(var j = i+1; j < this.__collidables.length; j++)
             {
-                if(this.__collidables[i].GetCollider().Intersects(this.__collidables[j].GetCollider()))
+                for(var ii = 0; ii < this.__collidables[i].length; ii++)
                 {
-                    this.__collidables[i].OnCollision(this.__collidables[j]);
-                    this.__collidables[j].OnCollision(this.__collidables[i]);
+                    for(var jj = 0; jj < this.__collidables[j].length; jj++)
+                    {
+                        if(this.__collidables[i][ii].GetCollider().Intersects(this.__collidables[j][jj].GetCollider()))
+                        {
+                            this.__collidables[i][ii].OnCollision(this.__collidables[j][jj]);
+                            this.__collidables[j][jj].OnCollision(this.__collidables[i][ii]);
+                        }
+                    }
                 }
             }
         }

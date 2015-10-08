@@ -1,6 +1,6 @@
 function Laser(player, angle, power, x, y)
 {
-    Collidable.call(this, "Bullet", "laser-red sprites.png", {x:x, y:y}, 83/2, 1200, true);
+    Collidable.call(this, "Bullet", "laser-red sprites.png", {x:x, y:y}, 83/2, 1200, GameManager.PHYSICS_LAYERS.BULLETS, true);
 
     var LASER_FRAME_RATE = 20;
     var LASER_FRAMES = 2;
