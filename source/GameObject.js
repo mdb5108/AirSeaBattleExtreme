@@ -21,6 +21,7 @@ function GameObject(imgPath, x, y, xScl, yScl)
     this.sound_path 
     this.sound_obj;
     this.sound_loop = true;
+    this.sound_paths = [];
 
     this.animated = false;
     this.frameTime = 0;
@@ -64,6 +65,9 @@ GameObject.prototype.Draw = function(canvas2D)
 
 GameObject.prototype.PlaySound = function ()
 {
+    if (this.sound_obj != null)
+        this.PauseSound();
+
     this.sound_obj = new Audio(this.sound_path);
     this.sound_obj.play();
     if(this.sound_loop == true)
@@ -74,6 +78,18 @@ GameObject.prototype.PauseSound = function ()
 {
     if(this.sound_obj != null)
     this.sound_obj.pause();
+}
+
+
+GameObject.prototype.ChangeTrack = function (trackIndex)
+{
+    if (this.sound_obj != null)
+        this.PauseSound();
+
+    this.sound_obj = new Audio(this.sound_paths[trackIndex]);
+    this.sound_obj.play();
+    if(this.sound_loop == true)
+      this.sound_obj.loop = true; 
 }
 GameObject.prototype.Update = function(gametime)
 {

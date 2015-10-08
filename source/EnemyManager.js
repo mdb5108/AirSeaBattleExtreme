@@ -12,7 +12,6 @@ function EnemyManager()
     GameObject.call(this, "", 0,0,200,200);
     this.planes = [];
     this.imgPath = "airplane1.png";
-
     this.PERC_TO_START_SCALE = .25;
     this.PERC_TO_STOP_SCALE = .80;
     this.START_TIME_DELAY = .6;
@@ -20,6 +19,7 @@ function EnemyManager()
     this.MAX_TIME_DELAY = .1;
     this.time_delay = this.START_TIME_DELAY;
     this.proxy_round_time = GameManager.GAME_LENGTH;
+
     this.counter = this.time_delay;
 
     this.lastUfoDirection = 1;
@@ -28,12 +28,13 @@ function EnemyManager()
 
     this.min_lanes = 1;
     this.max_lanes = 7;
-    this.planes_path = ["airplane1.png","plane_2.png","plane_3.png","plane_4.png","plane_5.png","plane_6.png", "golden.png"];
+    this.planes_path = ["airplane1.png","plane_2.png","plane_3.png","plane_4.png","plane_5.png","plane_6.png", "golden.png","plane_small_heli1.png","plane_small_heli2.png"];
     this.plane_type_min = 1;
-    this.plane_type_max = 100;
+    this.plane_type_max = 130;
     this.plane_type = 0;
-    // this.sound_paths = ["Plane_01.mp3","Plane_01.mp3","Fast Jet_01.mp3","Fast Jet_01.mp3","Helicopter_01.mp3","Helicopter_01.mp3"];
-    this.sound_paths = ["no_sound","no_sound","Fast Jet_01.mp3","Fast Jet_01.mp3","Helicopter_01.mp3","Helicopter_01.mp3", "no_sound"];
+    //DEBUG FOR SOUND
+    //this.sound_paths = ["no_sound","no_sound","Fast Jet_01.mp3","Fast Jet_01.mp3","Helicopter_01.mp3","Helicopter_01.mp3", "no_sound","Helicopter_01.mp3","Helicopter_01.mp3"];
+    this.sound_paths = ["New Slow Plane.mp3","New Slow Plane.mp3","Fast Jet_01.mp3","Fast Jet_01.mp3","Helicopter_01.mp3","Helicopter_01.mp3", "no_sound","Helicopter_01.mp3","Helicopter_01.mp3"];
 
 };
 
@@ -41,7 +42,6 @@ function EnemyManager()
 EnemyManager.prototype.Update = function(gametime) {
     var current_lane;
     this.plane_type = 0;
-
     this.UpdateTimeDelay(gametime);
     this.ufoSpawnDelayCur -= gametime;
     if(this.ufoSpawnDelayCur <= 0)
@@ -169,6 +169,41 @@ EnemyManager.prototype.Update = function(gametime) {
                 case 100:
                     this.plane_type = 1;
                     break;
+                case 101:
+                case 102:
+                case 103:
+                case 104:
+                case 105:
+                case 106:
+                case 107:
+                case 108:
+                case 109:
+                case 110:
+                case 111:
+                case 112:
+                case 113:
+                case 114:
+                case 115:
+                    this.plane_type = 7;
+                    break;
+                case 116:
+                case 117:
+                case 118:
+                case 119:
+                case 120:
+                case 121:
+                case 122:
+                case 123:
+                case 124:
+                case 125:
+                case 126:
+                case 127:
+                case 128:
+                case 129:
+                case 130:
+                    this.plane_type = 8;
+                    break;
+
             }
             this.img.src = this.imgPath;
             this.SpawnPlane(this.plane_type);
@@ -262,6 +297,18 @@ EnemyManager.prototype.SpawnPlane = function(plane_type, direction)
             veloObj = new Vec2(100, 0);
             points = 20;
             health = 2;
+            break;
+        case 7:
+            veloObj = new Vec2(200,0);
+            points = 5;
+            health = 1;                   
+            break;
+        case 8:
+            veloObj = new Vec2(200,0);
+            points = 5;
+            health = 1;                   
+            break;            
+
     }
 
     current_lane = Math.floor(Math.random() * (this.max_lanes - this.min_lanes + 1)) + this.min_lanes;
