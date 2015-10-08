@@ -5,13 +5,19 @@ function GameInstructState()
 
 GameInstructState.prototype.constructor = GameInstructState;
 
-GameInstructState.prototype.StartProxy = function(instructions)
+GameInstructState.prototype.StartProxy = function()
 {
     var object = new GameObject("", 0, 0, 0, 0);
     object.firedOnce = false;
-    object.instructions = instructions;
+    object.instructions = undefined;
     object.scoreGuid = undefined;
     object.SetUpdateDuringPause(true);
+
+    object.AddInstruction = function(instruction)
+    {
+        this.instructions = instruction;
+    };
+
     object.Update = function(gameTime)
     {
         if(InputManager.getFire(0) || InputManager.getFire(1))
@@ -20,6 +26,7 @@ GameInstructState.prototype.StartProxy = function(instructions)
             {
                 InputManager.blockFire(500);
                 this.scoreGuid = new GameObject("key guid.png", GameManager.CANVAS_WIDTH/2, GameManager.CANVAS_HEIGHT/2, GameManager.CANVAS_WIDTH,GameManager.CANVAS_HEIGHT);
+                this.scoreGuid.SetUpdateDuringPause(true);
                 this.instructions.Destroy();
                 this.firedOnce = true;
             }
@@ -31,7 +38,10 @@ GameInstructState.prototype.StartProxy = function(instructions)
     };
     object.Draw = function(canvas2D)
     {
-        /* MEANT TO NOT DRAW ANYTHING */
+        canvas2D.save();
+        canvas2D.globalAlpha=0.75;
+        canvas2D.fillRect(0,0, GameManager.CANVAS_WIDTH, GameManager.CANVAS_HEIGHT);
+        canvas2D.restore();
     };
 
     object.Destroy = function()
@@ -49,11 +59,15 @@ GameInstructState.prototype.Enter = function()
     GameManager.Pause();
     InputManager.blockFire(1000);
 
+    this.startProxy = GameInstructState.prototype.StartProxy();
+
     var FONT_HEIGHT = 50;
     //Below commented text is for displaying text instead of image
     this.instructions = new GameObject("control guid.png", GameManager.CANVAS_WIDTH/2, GameManager.CANVAS_HEIGHT/2, GameManager.CANVAS_WIDTH,GameManager.CANVAS_HEIGHT);
+    this.instructions.SetUpdateDuringPause(true);
 
-    this.startProxy = GameInstructState.prototype.StartProxy(this.instructions);
+    this.startProxy.AddInstruction(this.instructions);
+
 };
 
 GameInstructState.prototype.Leave = function()
