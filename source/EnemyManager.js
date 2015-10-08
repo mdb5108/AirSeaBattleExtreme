@@ -247,7 +247,6 @@ EnemyManager.prototype.UpdateTimeDelay = function(gameTime) {
             this.time_delay = this.MIN_TIME_DELAY;
         }
     }
-    console.log(this.time_delay);
 }
 
 EnemyManager.prototype.Draw = function (){
