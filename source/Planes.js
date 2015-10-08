@@ -63,8 +63,7 @@ Plane.prototype.OnCollision = function(collider)
             this.sound_loop = false;
             this.sound_path = "Explosion_01.mp3";
             this.PlaySound();                  
-            this.Destroy();
-            new Explosion(this.x, this.y, this.WIDTH, this.HEIGHT);
+            this.Destroy(true);
          
             if(collider.player.playerNum == 0)
             {
@@ -75,6 +74,16 @@ Plane.prototype.OnCollision = function(collider)
                 GameManager.__scores[1] += this.points;
             }
         }
+    }
+};
+
+Plane.prototype.Destroy = function(hitByBullet)
+{
+    Collidable.prototype.Destroy.call(this);
+
+    if(hitByBullet != undefined)
+    {
+        new Explosion(this.x, this.y, this.WIDTH, this.HEIGHT);
     }
 };
 

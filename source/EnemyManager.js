@@ -252,7 +252,7 @@ EnemyManager.prototype.Destroy = function() {
 EnemyManager.prototype.Clear = function() {
     for(var i = 0; i < this.planes.length; i++)
     {
-        this.planes[i].Destroy();
+        this.planes[i].Destroy(true);
     }
     this.planes = [];
 }
