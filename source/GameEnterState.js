@@ -13,7 +13,7 @@ GameEnterState.prototype.StartProxy = function()
     {
         if(InputManager.getFire(0) || InputManager.getFire(1))
         {
-            GameManager.ChangeState(GameManager.GAME_STATE.PLAYING);
+            GameManager.ChangeState(GameManager.GAME_STATE.INSTRUCTING);
         }
     };
     object.Draw = function(canvas2D)
@@ -27,7 +27,7 @@ GameEnterState.prototype.StartProxy = function()
 GameEnterState.prototype.Enter = function()
 {
     GameManager.Pause();
-    InputManager.blockFire(1000);
+    InputManager.blockFire(500);
 
     var FONT_HEIGHT = 50;
     //Below commented text is for displaying text instead of image

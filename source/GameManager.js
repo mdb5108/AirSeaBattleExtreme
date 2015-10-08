@@ -31,10 +31,11 @@ var GameManager =
     __paused : false,
     GAME_STATE : {
         ENTER: 0,
-        PLAYING: 1,
-        EXIT: 2,
+        INSTRUCTING: 1,
+        PLAYING: 2,
+        EXIT: 3,
     },
-    __GAME_STATES : [new GameEnterState(), new GamePlayState(), new GameExitState()],
+    __GAME_STATES : [new GameEnterState(), new GameInstructState(), new GamePlayState(), new GameExitState()],
     __gameState : undefined,
     __gameManagerState : "NONE",
 
