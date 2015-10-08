@@ -187,6 +187,7 @@ EnemyManager.prototype.Update = function(gametime) {
                     this.plane_type = 7;
                     break;
                 case 116:
+                
                 case 117:
                 case 118:
                 case 119:

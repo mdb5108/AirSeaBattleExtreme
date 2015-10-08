@@ -65,7 +65,7 @@ Player.prototype.POWER_UPS = {
     LASER: 4,
 };
 Player.prototype.GetRandomPowerup = function()
-{
+{    
     var powerupIndex = Math.floor(Math.random()*Player.prototype.POWER_UP_SIZE);
     var powerup;
     switch(powerupIndex)
@@ -139,22 +139,22 @@ Player.prototype.Update = function(gameTime)
                     {
                         var bulletAngle = spreadOffset + (this.barrel.angle - (Math.PI/2) + this.SPREAD_SHOT_SPREAD*i);
                         var spreadVelocity = VectorMultiply(this.BULLET_SPEED, VectorFromAngle(bulletAngle));
-                        new Bullet("spreadshot.png", this, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                        new Bullet("spreadshot.png", this, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10,0);
                     }
                     break;
                 case Player.prototype.POWER_UPS.RAPID_FIRE:
                     velocity = VectorMultiply(2, velocity);
-                    this.midbullet = new Bullet("rapidshot.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                    this.midbullet = new Bullet("rapidshot.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10,0);
                     break;
                 case Player.prototype.POWER_UPS.WAVESHOT:
-                    this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, true);
-                    this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, false);
+                    this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, true,0);
+                    this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, false,0);
                     break;
                 
                     //  DO NOT TOUCH BELOW THIS LINE, IT WORKS RIGHT NOW!!!!
                 case Player.prototype.POWER_UPS.LASER:
                 default:
-                    this.midbullet = new Bullet("bullet.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                    this.midbullet = new Bullet("bullet.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10,1);
                     this.powerSymbol = null;
                     break;
             }

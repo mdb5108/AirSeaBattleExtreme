@@ -1,4 +1,4 @@
-function Bullet(imgPath, player, angle, power, velocity, x, y, xScl, yScl)
+function Bullet(imgPath, player, angle, power, velocity, x, y, xScl, yScl,trackIndex)
 {
 	Collidable.call(this, "Bullet", imgPath, {x:x, y:y}, xScl, yScl, GameManager.PHYSICS_LAYERS.BULLETS);
     this.player = player;
@@ -8,7 +8,8 @@ function Bullet(imgPath, player, angle, power, velocity, x, y, xScl, yScl)
 
     Bullet.bullets.push(this);
     Bullet.__clearing = false;
-	this.sound_path = "Single Shot_01.mp3";    	
+    this.sound_paths = ["Single Shot_01.mp3","Alternate Single Fire.mp3"];
+	this.sound_path = this.sound_paths[trackIndex];
     this.sound_loop = false;
 
 };

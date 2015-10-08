@@ -14,6 +14,8 @@ function Laser(player, angle, power, x, y)
     this.player = player;
     this.angle = angle;
     this.power = power;
+    this.sound_path = "Laser Charge and Shot_mixdown.mp3";     
+    this.sound_loop = false;
 
     this.SetAnimated(83, 1200, LASER_FRAME_RATE, LASER_COLUMNS, LASER_ROWS, LASER_FRAMES);
 };
@@ -22,6 +24,7 @@ Laser.prototype = Object.create(Collidable.prototype);
 Laser.prototype.constructor = Laser;
 
 Laser.prototype.Draw = function(canvas2D)
-{
+{   
+
     Collidable.prototype.Draw.call(this, canvas2D);
 };
