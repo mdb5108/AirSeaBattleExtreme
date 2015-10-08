@@ -91,6 +91,12 @@ GameObject.prototype.ChangeTrack = function (trackIndex)
     if(this.sound_loop == true)
       this.sound_obj.loop = true; 
 }
+
+GameObject.prototype.OnAudioEndCallback = function(callback)
+{
+    var gameObject = this;
+    this.sound_obj.onended = function(){callback(gameObject);};
+};
 GameObject.prototype.Update = function(gametime)
 {
     if(this.animated)

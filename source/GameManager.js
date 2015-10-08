@@ -132,16 +132,15 @@ var GameManager =
         //music switch
         if(stateEnum == this.GAME_STATE.ENTER && this.__music_obj != null)
         {            
+            this.__music_obj.sound_loop = false;
             this.__music_obj.ChangeTrack(0);
+            this.__music_obj.OnAudioEndCallback(function(gameObject) {
+                gameObject.sound_loop = true;
+                gameObject.ChangeTrack(1);
+                gameObject.Draw();
+            });
             this.__music_obj.Draw();
         }       
-
-
-        if(stateEnum == this.GAME_STATE.PLAYING)
-        {            
-            this.__music_obj.ChangeTrack(1);
-            this.__music_obj.Draw();
-        }    
 
         this.__gameState.Enter();
     },
