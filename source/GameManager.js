@@ -29,10 +29,13 @@ var GameManager =
     __GAME_STATES : [new GameEnterState(), new GamePlayState(), new GameExitState()],
     __gameState : undefined,
     __gameManagerState : "NONE",
-    __scores : [],
+    __scores : [],    
 
     CANVAS_WIDTH : $("#canvas").width(),
     CANVAS_HEIGHT : $("#canvas").height(),
+
+    //music object
+    __music_obj : null,
 
     InitializeIntervals : function(updateInterval, drawInterval, physicsInterval)
     {
@@ -60,6 +63,12 @@ var GameManager =
         this.__gameDrawLoop = setInterval(function(){gameManager.__Draw(canvas2D)}, this.__drawInterval);
         this.__gameUpdateLoop = setInterval(function(){gameManager.__Update()}, this.__updateInterval);
         this.__gamePhysicsLoop = setInterval(function(){gameManager.__PhysicsUpdate()}, this.__physicsInterval);
+
+        if (this.__music_obj == null)
+        {
+        this.__music_obj = new Music(0);
+        this.__music_obj.Draw();
+        }
 
         this.ChangeState(this.GAME_STATE.ENTER);
     },
@@ -99,6 +108,21 @@ var GameManager =
         }
 
         this.__gameState = this.__GAME_STATES[stateEnum];
+
+        //music switch
+        if(stateEnum == this.GAME_STATE.ENTER && this.__music_obj != null)
+        {            
+            this.__music_obj.ChangeTrack(0);
+            this.__music_obj.Draw();
+        }       
+
+
+        if(stateEnum == this.GAME_STATE.PLAYING)
+        {            
+            this.__music_obj.ChangeTrack(1);
+            this.__music_obj.Draw();
+        }    
+
         this.__gameState.Enter();
     },
 
