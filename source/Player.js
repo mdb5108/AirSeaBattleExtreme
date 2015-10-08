@@ -23,7 +23,12 @@ function Player(playerNum, x, y)
     this.barrelRotation = 2;
 
     this.bulletFireDelayCur = 0;
+    
+    this.POWER_UP_DELAY = 7;
+    this.powerUpCurrent = this.POWER_UP_DELAY;
+
     this.canFire = true;
+    this.powerSymbol = null;
 
     this.PLAYER_ROTATE_SPEED = Math.PI;
 
@@ -70,12 +75,15 @@ Player.prototype.GetRandomPowerup = function()
             break;
         case 1:
             powerup = Player.prototype.POWER_UPS.RAPID_FIRE;
+            
             break;
         case 2:
             powerup = Player.prototype.POWER_UPS.WAVESHOT;
+            
             break;
         case 3:
             powerup = Player.prototype.POWER_UPS.LASER;
+            
             break;
     }
 
@@ -89,6 +97,16 @@ Player.prototype.Update = function(gameTime)
     GameObject.prototype.Update.call(this, gameTime);
 
     this.UpdateLaserDelay(gameTime);
+
+    if(this.curpowerup != Player.prototype.POWER_UPS.NORMAL)
+    {
+        this.powerUpCurrent -= gameTime;
+        if(this.powerUpCurrent <= 0)
+        {
+            this.ChangePowerUp(Player.prototype.POWER_UPS.NORMAL);
+            this.powerUpCurrent = this.POWER_UP_DELAY;
+        }
+    }
 
     if(!this.canFire)
     {
@@ -111,30 +129,35 @@ Player.prototype.Update = function(gameTime)
 
         bulletPosition.x += Math.cos(this.barrel.angle - Math.PI/2);
         bulletPosition.y += Math.sin(this.barrel.angle - Math.PI/2);
-
-        switch(this.curpowerup)
+        if(this.curpowerup != null)
         {
-            case Player.prototype.POWER_UPS.SPREADSHOT:
-                var spreadOffset = -(this.SPREAD_SHOT_SPREAD*Math.floor(this.SPREAD_COUNT/2));
-                for(var i = 0; i < this.SPREAD_COUNT; i++)
-                {
-                    var bulletAngle = spreadOffset + (this.barrel.angle - (Math.PI/2) + this.SPREAD_SHOT_SPREAD*i);
-                    var spreadVelocity = VectorMultiply(this.BULLET_SPEED, VectorFromAngle(bulletAngle));
-                    new Bullet("bullet2.png", this, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
-                }
-                break;
-            case Player.prototype.POWER_UPS.RAPID_FIRE:
-                velocity = VectorMultiply(2, velocity);
-                this.midbullet = new Bullet("bullet2.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
-                break;
-            case Player.prototype.POWER_UPS.WAVESHOT:
-                this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, true);
-                this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, false);
-                break;
-            case Player.prototype.POWER_UPS.LASER:
-            default:
-                this.midbullet = new Bullet("bullet2.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
-                break;
+            switch(this.curpowerup)
+            {
+                case Player.prototype.POWER_UPS.SPREADSHOT:
+                    var spreadOffset = -(this.SPREAD_SHOT_SPREAD*Math.floor(this.SPREAD_COUNT/2));
+                    for(var i = 0; i < this.SPREAD_COUNT; i++)
+                    {
+                        var bulletAngle = spreadOffset + (this.barrel.angle - (Math.PI/2) + this.SPREAD_SHOT_SPREAD*i);
+                        var spreadVelocity = VectorMultiply(this.BULLET_SPEED, VectorFromAngle(bulletAngle));
+                        new Bullet("spreadshot.png", this, bulletAngle+(Math.PI/2), 1, spreadVelocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                    }
+                    break;
+                case Player.prototype.POWER_UPS.RAPID_FIRE:
+                    velocity = VectorMultiply(2, velocity);
+                    this.midbullet = new Bullet("rapidshot.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                    break;
+                case Player.prototype.POWER_UPS.WAVESHOT:
+                    this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, true);
+                    this.midbullet = new WaveBullet(this, this.barrel.angle, 2, this.BULLET_SPEED, facing, bulletPosition.x, bulletPosition.y, false);
+                    break;
+                
+                    //  DO NOT TOUCH BELOW THIS LINE, IT WORKS RIGHT NOW!!!!
+                case Player.prototype.POWER_UPS.LASER:
+                default:
+                    this.midbullet = new Bullet("bullet.png", this, this.barrel.angle, 1, velocity, bulletPosition.x, bulletPosition.y, 10, 10);
+                    this.powerSymbol = null;
+                    break;
+            }
         }
         this.canFire = false;
     }
@@ -183,19 +206,85 @@ Player.prototype.Draw = function(canvas2D)
 Player.prototype.ChangePowerUp = function(powerup)
 {
     //Set to normalative state
+    this.powerUpCurrent = this.POWER_UP_DELAY;
     this.bulletFireDelay = this.BULLET_NORMAL_DELAY;
     this.curpowerup = powerup;
-    switch(this.curpowerup)
+    if(this.curpowerup == Player.prototype.POWER_UPS.NORMAL)
     {
-        case Player.prototype.POWER_UPS.RAPID_FIRE:
-            this.bulletFireDelay = this.RAPID_BULLET_DELAY;
-            break;
-        case Player.prototype.POWER_UPS.WAVESHOT:
-            this.bulletFireDelay = this.WAVE_BULLET_DELAY;
-            break;
-        case Player.prototype.POWER_UPS.SPREADSHOT:
-            this.bulletFireDelay = this.SPREAD_BULLET_DELAY;
-            break;
+        if(this.powerSymbol != null && this.powerSymbol != undefined)
+        {
+            this.powerSymbol.Destroy();
+        }
+    }
+    else
+    {
+        switch(this.curpowerup)
+        {
+            case Player.prototype.POWER_UPS.RAPID_FIRE:
+                this.bulletFireDelay = this.RAPID_BULLET_DELAY;
+                if(this.playerNum == 0)
+                {
+                    this.powerSymbol = new Symbol("rapid.png", this.playerNum, this.x - 70, this.y, 70, 70);
+                }
+                else if(this.playerNum == 1)
+                {
+                    this.powerSymbol = new Symbol("rapid.png", this.playerNum, this.x + 70, this.y, 70, 70);
+                }
+                else
+                {
+                    this.powerSymbol = null;
+                }
+                break;
+            case Player.prototype.POWER_UPS.WAVESHOT:
+                this.bulletFireDelay = this.WAVE_BULLET_DELAY;
+                if(this.playerNum == 0)
+                {
+                    this.powerSymbol = new Symbol("wave.png", this.playerNum, this.x - 70, this.y, 70, 70);
+                }
+                else if(this.playerNum == 1)
+                {
+                    this.powerSymbol = new Symbol("wave.png", this.playerNum, this.x + 70, this.y, 70, 70);
+                }
+                else
+                {
+                    this.powerSymbol = null;
+                }
+                break;
+            case Player.prototype.POWER_UPS.SPREADSHOT:
+                this.bulletFireDelay = this.SPREAD_BULLET_DELAY;
+                if(this.playerNum == 0)
+                {
+                    this.powerSymbol = new Symbol("spread.png", this.playerNum, this.x - 70, this.y, 70, 70);
+                }
+                else if(this.playerNum == 1)
+                {
+                    this.powerSymbol = new Symbol("spread.png", this.playerNum, this.x + 70, this.y, 70, 70);
+                }
+                else
+                {
+                    this.powerSymbol = null;
+                }
+                break;
+            case Player.prototype.POWER_UPS.LASER:
+                if(this.playerNum == 0)
+                {
+                    this.powerSymbol = new Symbol("laser.png", this.playerNum, this.x - 70, this.y, 70, 70);
+                }
+                else if(this.playerNum == 1)
+                {
+                    this.powerSymbol = new Symbol("laser.png", this.playerNum, this.x + 70, this.y, 70, 70);
+                }
+                else
+                {
+                    this.powerSymbol = null;
+                }
+                break;
+            default:
+                this.powerSymbol = null;
+                this.bulletFireDelay = this.BULLET_NORMAL_DELAY;
+                break;
+            }
+
     }
 };
 
