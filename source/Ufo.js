@@ -1,6 +1,6 @@
 function Ufo(powerup, x, y, health, velocity, direction, points, sound_path)
 {
-    Plane.call(this, "golden.png", x, y, health, velocity, direction, points, sound_path);
+    Plane.call(this, "golden.png", x, y, health, velocity, direction, points, sound_path, 115, 65);
     this.powerup = powerup;
     this.diedInCollision = false;
 };
