@@ -1,6 +1,6 @@
 function Bullet(imgPath, player, angle, power, velocity, x, y, xScl, yScl)
 {
-	Collidable.call(this, "Bullet", imgPath, {x:x, y:y}, xScl, yScl);
+	Collidable.call(this, "Bullet", imgPath, {x:x, y:y}, xScl, yScl, GameManager.PHYSICS_LAYERS.BULLETS);
     this.player = player;
     this.velocity = velocity;
     this.angle = angle;

@@ -1,6 +1,11 @@
-function Collidable(tag, imgPath, initialPosition, width, height, polygonial)
+function Collidable(tag, imgPath, initialPosition, width, height, layer, polygonial)
 {
     GameObject.call(this, imgPath, initialPosition.x, initialPosition.y, width, height);
+
+    if(layer == undefined)
+        this.layer = 0;
+    else
+        this.layer = layer;
 
     this.tag = tag;
     if(polygonial != undefined && polygonial == true)
@@ -19,7 +24,7 @@ function Collidable(tag, imgPath, initialPosition, width, height, polygonial)
            + height/2);
         this.polygonial = false;
     }
-    GameManager.AddCollidable(this);
+    GameManager.AddCollidable(this, this.layer);
 }
 Collidable.prototype = Object.create(GameObject.prototype);
 Collidable.prototype.constructor = Collidable;
@@ -69,5 +74,5 @@ Collidable.prototype.Destroy = function()
 {
     //TODO: make destroy the GameObject destroy
     GameObject.prototype.Destroy.call(this);
-    GameManager.RemoveCollidable(this);
+    GameManager.RemoveCollidable(this, this.layer);
 }

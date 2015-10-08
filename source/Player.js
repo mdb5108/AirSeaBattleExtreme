@@ -7,7 +7,7 @@ function Player(playerNum, x, y)
     this.BARREL_OFFSET_TO_BASE = 25;
     this.BARREL_OFFSET_TO_TIP = 70;
     this.BULLET_SPEED = 500;
-    this.BULLET_NORMAL_DELAY = .2;
+    this.BULLET_NORMAL_DELAY = .4;
     this.RAPID_BULLET_DELAY = .175;
     this.WAVE_BULLET_DELAY = .5;
     this.SPREAD_BULLET_DELAY = .5;
