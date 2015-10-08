@@ -16,6 +16,8 @@ function Player(playerNum, x, y)
     this.SPREAD_COUNT = 3;
     this.SPREAD_SHOT_SPREAD = Math.PI/4;
 
+    this.KICK_BACK_OFFSET = 10;
+
     this.LASER_TIME = .5;
     this.curLaserTime = 0;
     this.laserActive = false;
@@ -34,16 +36,18 @@ function Player(playerNum, x, y)
 
     this.playerNum = playerNum;
     this.bullet = null;
+
+    this.BARREL_START_POSITION = {x:x, y:y+this.BARREL_OFFSET_TO_BASE};
     
     if(this.playerNum == 0)
     {
         GameObject.call(this, "turret_b.png", x, y, 105, 150);
-        this.barrel = new GameObject("turret_a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
+        this.barrel = new GameObject("turret_a.png", this.BARREL_START_POSITION.x, this.BARREL_START_POSITION.y, 105, 150);
     }
     if(this.playerNum == 1)
     {
         GameObject.call(this, "turret_2b.png", x, y, 105, 150);
-        this.barrel = new GameObject("turret_2a.png", x, y+this.BARREL_OFFSET_TO_BASE, 105, 150);
+        this.barrel = new GameObject("turret_2a.png", this.BARREL_START_POSITION.x, this.BARREL_START_POSITION.y, 105, 150);
     }
 
     this.barrel.angle = 0;
@@ -118,6 +122,9 @@ Player.prototype.Update = function(gameTime)
     if(!this.canFire)
     {
         this.bulletFireDelayCur += gameTime;
+        var kickPosition = VectorAdd(this.BARREL_START_POSITION, VectorMultiply(1- this.bulletFireDelayCur/this.bulletFireDelay, VectorMultiply(-this.KICK_BACK_OFFSET, this.GetFacing())));
+        this.barrel.x = kickPosition.x;
+        this.barrel.y = kickPosition.y;
         if(this.bulletFireDelayCur >= this.bulletFireDelay)
         {
             this.bulletFireDelayCur = 0;
