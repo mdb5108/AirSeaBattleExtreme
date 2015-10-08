@@ -12,6 +12,7 @@ function EnemyManager()
     GameObject.call(this, "", 0,0,200,200);
     this.planes = [];
     this.imgPath = "airplane1.png";
+
     this.PERC_TO_START_SCALE = .25;
     this.PERC_TO_STOP_SCALE = .80;
     this.START_TIME_DELAY = .6;
@@ -20,6 +21,11 @@ function EnemyManager()
     this.time_delay = this.START_TIME_DELAY;
     this.proxy_round_time = GameManager.GAME_LENGTH;
     this.counter = this.time_delay;
+
+    this.lastUfoDirection = 1;
+    this.UFO_SPAWN_DELAY = 10;
+    this.ufoSpawnDelayCur = this.UFO_SPAWN_DELAY;
+
     this.min_lanes = 1;
     this.max_lanes = 7;
     this.planes_path = ["airplane1.png","plane_2.png","plane_3.png","plane_4.png","plane_5.png","plane_6.png", "golden.png"];
@@ -34,18 +40,22 @@ function EnemyManager()
 
 EnemyManager.prototype.Update = function(gametime) {
     var current_lane;
-    var veloObj;
-    var points;
-    var health;
     this.plane_type = 0;
 
     this.UpdateTimeDelay(gametime);
+    this.ufoSpawnDelayCur -= gametime;
+    if(this.ufoSpawnDelayCur <= 0)
+    {
+        this.lastUfoDirection = this.lastUfoDirection == 1 ? -1 : 1;
+        this.SpawnPlane(6, this.lastUfoDirection);
+        this.ufoSpawnDelayCur = this.UFO_SPAWN_DELAY;
+    }
     if ( this.counter <= 0) {
         //Spawn multiple planes if multiple spawn times have passed
         while(this.counter <= 0)
         {
-            this.plane_type = Math.floor(Math.random() * (this.plane_type_max - this.plane_type_min + 1)) + this.plane_type_min;
-            switch(this.plane_type)
+            var randValue = Math.floor(Math.random() * (this.plane_type_max - this.plane_type_min + 1)) + this.plane_type_min;
+            switch(randValue)
             {
                 case 1:
                 case 2:
@@ -58,9 +68,6 @@ EnemyManager.prototype.Update = function(gametime) {
                 case 27:
                 case 28:
                     this.plane_type = 2;
-                    veloObj = new Vec2(400,0);
-                    points = 10;
-                    health = 1;
                     break;
                 case 3:
                 case 4:
@@ -73,9 +80,6 @@ EnemyManager.prototype.Update = function(gametime) {
                 case 35:
                 case 36:
                     this.plane_type = 3;
-                    veloObj = new Vec2(400,0);
-                    points = 10;
-                    health = 1;
                     break;
                 case 5:
                 case 6:
@@ -93,9 +97,6 @@ EnemyManager.prototype.Update = function(gametime) {
                 case 47:
                 case 48:
                     this.plane_type = 5;
-                    veloObj = new Vec2(200,0);
-                    points = 5;
-                    health = 2;
                     break;
                 case 8:
                 case 9:
@@ -113,9 +114,6 @@ EnemyManager.prototype.Update = function(gametime) {
                 case 59:
                 case 60:
                     this.plane_type = 4;
-                    veloObj = new Vec2(200,0);
-                    points = 5;
-                    health = 2;
                     break;
                 case 11:
                 case 12:
@@ -143,9 +141,6 @@ EnemyManager.prototype.Update = function(gametime) {
                 case 79:
                 case 80:
                     this.plane_type = 0;
-                    veloObj = new Vec2(100,0);
-                    points = 1;
-                    health = 1;
                     break;
                 case 16:
                 case 17:
@@ -171,52 +166,12 @@ EnemyManager.prototype.Update = function(gametime) {
                 case 97:
                 case 98:
                 case 99:
-                    this.plane_type = 1;
-                    veloObj = new Vec2(100,0);
-                    points = 1;
-                    health = 1;
-                    break;
                 case 100:
-                    this.plane_type = 7;
-                    veloObj = new Vec2(100, 0);
-                    points = 20;
-                    health = 2;
+                    this.plane_type = 1;
                     break;
             }
             this.img.src = this.imgPath;
-            current_lane = Math.floor(Math.random() * (this.max_lanes - this.min_lanes + 1)) + this.min_lanes;
-            var startLocation;
-            var direction;
-            if(Math.random() < 0.5)
-            {
-                startLocation = new Vec2(0, 50*current_lane);
-                direction = 1;
-            }
-            else
-            {
-                startLocation = new Vec2(GameManager.CANVAS_WIDTH, 50*current_lane);
-                veloObj = this.negateVelocity(veloObj);
-                direction = -1;
-            }
-
-            var plane;
-            if(this.plane_type == 7)
-            {
-                plane = new Ufo(Player.prototype.GetRandomPowerup(),
-                        startLocation.x,
-                        startLocation.y,
-                        health,
-                        veloObj,
-                        direction,
-                        points,
-                        this.sound_paths[this.plane_type]);
-
-            }
-            else
-            {
-                plane = new Plane(this.planes_path[this.plane_type], startLocation.x, startLocation.y ,health,veloObj,direction,points,this.sound_paths[this.plane_type]);
-            }
-            this.planes.push(plane);
+            this.SpawnPlane(this.plane_type);
             this.counter += this.time_delay;
         }
         this.counter = this.time_delay;
@@ -264,6 +219,92 @@ EnemyManager.prototype.Clear = function() {
         this.planes[i].Destroy();
     }
     this.planes = [];
+}
+
+EnemyManager.prototype.SpawnPlane = function(plane_type, direction)
+{
+    var veloObj;
+    var points;
+    var health;
+    switch(plane_type)
+    {
+        case 2:
+            veloObj = new Vec2(400,0);
+            points = 10;
+            health = 1;
+            break;
+        case 3:
+            veloObj = new Vec2(400,0);
+            points = 10;
+            health = 1;
+            break;
+        case 5:
+            veloObj = new Vec2(200,0);
+            points = 5;
+            health = 2;
+            break;
+        case 4:
+            veloObj = new Vec2(200,0);
+            points = 5;
+            health = 2;
+            break;
+        case 0:
+            veloObj = new Vec2(100,0);
+            points = 1;
+            health = 1;
+            break;
+        case 1:
+            veloObj = new Vec2(100,0);
+            points = 1;
+            health = 1;
+            break;
+        case 6:
+            veloObj = new Vec2(100, 0);
+            points = 20;
+            health = 2;
+    }
+
+    current_lane = Math.floor(Math.random() * (this.max_lanes - this.min_lanes + 1)) + this.min_lanes;
+    var startLocation;
+    if(direction == undefined)
+    {
+        if(Math.random() < 0.5)
+        {
+            direction = 1;
+        }
+        else
+        {
+            direction = -1;
+        }
+    }
+
+    if(direction == 1)
+    {
+        startLocation = new Vec2(0, 50*current_lane);
+    }
+    else
+    {
+        veloObj = this.negateVelocity(veloObj);
+        startLocation = new Vec2(GameManager.CANVAS_WIDTH, 50*current_lane);
+    }
+
+    var plane;
+    if(plane_type == 6)
+    {
+        plane = new Ufo(Player.prototype.GetRandomPowerup(),
+                startLocation.x,
+                startLocation.y,
+                health,
+                veloObj,
+                direction,
+                points,
+                this.sound_paths[plane_type]);
+    }
+    else
+    {
+        plane = new Plane(this.planes_path[plane_type], startLocation.x, startLocation.y ,health,veloObj,direction,points,this.sound_paths[plane_type]);
+    }
+    this.planes.push(plane);
 }
 
 EnemyManager.prototype.negateVelocity = function(veloObj) {
