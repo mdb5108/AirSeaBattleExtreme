@@ -16,7 +16,7 @@ function EnemyManager()
     this.PERC_TO_STOP_SCALE = .80;
     this.START_TIME_DELAY = .6;
     this.MIN_TIME_DELAY = .03;
-    this.MAX_TIME_DELAY = .1;
+    this.MAX_TIME_DELAY = .3;
     this.time_delay = this.START_TIME_DELAY;
     this.proxy_round_time = GameManager.GAME_LENGTH;
 
