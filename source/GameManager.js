@@ -37,6 +37,8 @@ var GameManager =
     __GAME_STATES : [new GameEnterState(), new GamePlayState(), new GameExitState()],
     __gameState : undefined,
     __gameManagerState : "NONE",
+
+    GAME_LENGTH: 60,
     __scores : [],
 
     CANVAS_WIDTH : $("#canvas").width(),
