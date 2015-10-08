@@ -311,7 +311,14 @@ EnemyManager.prototype.SpawnPlane = function(plane_type, direction)
 
     }
 
-    current_lane = Math.floor(Math.random() * (this.max_lanes - this.min_lanes + 1)) + this.min_lanes;
+    if(plane_type != 6)
+    {
+        current_lane = Math.floor(Math.random() * (this.max_lanes - this.min_lanes + 1)) + this.min_lanes;
+    }
+    else
+    {
+        current_lane = Math.floor(Math.random() * (this.max_lanes - this.min_lanes + 1)/2) + this.min_lanes + (this.max_lanes - this.min_lanes + 1)/2;
+    }
     var startLocation;
     if(direction == undefined)
     {
