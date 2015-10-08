@@ -13,16 +13,6 @@ GamePlayState.prototype.Enter = function()
     GameManager.__scores[0] = 0;
     GameManager.__scores[1] = 0;
 
-    if(this.play1_img != undefined)
-        this.play1_img.Destroy();
-    
-
-    if(this.play2_img != undefined)
-        this.play2_img.Destroy();
-    
-    this.play1_img1 = new GameObject("player-1.png", 325, $("#canvas").height() - 90, 150,37);
-    this.play2_img2 = new GameObject("player-2.png", $("#canvas").width() - 325, $("#canvas").height() - 90,150,37);
-
     if(this.turret1 != undefined)
         this.turret1.Destroy();
     if(this.turret2 != undefined)

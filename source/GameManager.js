@@ -31,16 +31,16 @@ var GameManager =
     __paused : false,
     GAME_STATE : {
         ENTER: 0,
-        PLAYING: 1,
-        EXIT: 2,
+        INSTRUCTING: 1,
+        PLAYING: 2,
+        EXIT: 3,
     },
-    __GAME_STATES : [new GameEnterState(), new GamePlayState(), new GameExitState()],
+    __GAME_STATES : [new GameEnterState(), new GameInstructState(), new GamePlayState(), new GameExitState()],
     __gameState : undefined,
     __gameManagerState : "NONE",
 
     GAME_LENGTH: 60,
     __scores : [],
-    __scores : [],    
 
 
     CANVAS_WIDTH : $("#canvas").width(),
@@ -174,11 +174,8 @@ var GameManager =
         // canvas2D.fillText("Player1", 275, 520);
         // canvas2D.fillText("Player2", 650, 520);
 
-        if(this.__gameState == this.__GAME_STATES[1] || this.__gameState == this.__GAME_STATES[2])
-        {
-            canvas2D.fillText(this.__scores[0], 312, 550);
-            canvas2D.fillText(this.__scores[1], 685, 550);
-        }
+        canvas2D.fillText(this.__scores[0], 312, 550);
+        canvas2D.fillText(this.__scores[1], 685, 550);
 
         this.__gameManagerState = "NONE";
         this.__RemoveFinish();
