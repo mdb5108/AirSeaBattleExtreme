@@ -70,16 +70,10 @@ Player.prototype.POWER_UPS = {
 };
 Player.prototype.GetRandomPowerup = function()
 {    
-    if(this.powerupIndex == undefined)
-        this.powerupIndex = -1;
-
-    this.powerupIndex += 1;
-
-    if(this.powerupIndex >= Player.prototype.POWER_UP_SIZE)
-        this.powerupIndex = 0;
+    var powerupIndex = Math.floor(Math.random()*Player.prototype.POWER_UP_SIZE);
 
     var powerup;
-    switch(this.powerupIndex)
+    switch(powerupIndex)
     {
         case 0:
             powerup = Player.prototype.POWER_UPS.SPREADSHOT;
