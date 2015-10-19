@@ -4,7 +4,7 @@ $(document).ready(function(){
     var physicsInterval = 16;
 
     GameManager.InitializeIntervals(updateInterval, drawInterval, physicsInterval);
-    var background = new GameObject("img/background-new vision.png", $("#canvas").width()/2, $("#canvas").height()/2, $("#canvas").width(), $("#canvas").height());
+    background = new Backgrounds();
 
     GameManager.Start();
 

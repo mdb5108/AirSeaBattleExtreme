@@ -29,6 +29,8 @@ GameEnterState.prototype.Enter = function()
     GameManager.Pause();
     InputManager.blockFire(500);
 
+    background.RandomBackground();
+
     var FONT_HEIGHT = 50;
     //Below commented text is for displaying text instead of image
     //this.title = new TextBanner("Air Sea Battle", 50, -FONT_HEIGHT);
