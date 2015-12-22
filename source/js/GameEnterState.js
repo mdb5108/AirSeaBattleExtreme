@@ -35,7 +35,7 @@ GameEnterState.prototype.Enter = function()
     //Below commented text is for displaying text instead of image
     //this.title = new TextBanner("Air Sea Battle", 50, -FONT_HEIGHT);
     //this.subTitle = new TextBanner("EXTREME", 50, 0);
-    this.start_img = new GameObject("img/title.png", $("#canvas").width()/2, $("#canvas").height()/2 - 95, 834,191);
+    this.start_img = new GameObject("img/title.png", $("#canvas").width()/2 + 20, $("#canvas").height()/2 - 95, 834,191);
     this.instruction = new TextBanner("img/startbutton.png", 50, -250, FONT_HEIGHT);
     this.instruction.SetUpdateDuringPause(true);
     this.instruction.SetFlicker(1.5);
